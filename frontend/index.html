@@ -38,11 +38,11 @@
 
                 <li><a href="#" class="nav-link" onclick="trocarTela('horarios'); return false;">Horários</a></li>
 
+                <li><a href="#" class="nav-link" onclick="trocarTela('agenda'); return false;">Agenda</a></li>
+
                 <li><a href="#" class="nav-link" onclick="trocarTela('cartao'); return false;">Cartão</a></li>
 
             </ul>
-
-            <a href="#" class="nav-cta" onclick="trocarTela('assistente'); return false;">Começar</a>
 
         </div>
 
@@ -427,6 +427,93 @@
 
                     <p class="mensagem">
                         Escolha o campus acima para consultar os horários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <section class="tela" id="tela-agenda">
+
+            <div class="page-inner">
+
+                <div class="agenda-topo">
+
+                    <h2>Agenda do dia</h2>
+
+                    <p>
+                        Informe o horário que você quer chegar no IFSC
+                        ou o horário que você sai da aula, e o sistema
+                        calcula qual ônibus você deve pegar.
+                    </p>
+
+                </div>
+
+
+                <div class="agenda-form">
+
+                    <div class="agenda-campo">
+
+                        <label for="agenda-campus">Campus</label>
+
+                        <select id="agenda-campus">
+
+                            <option value="IFSC Seminário">
+                                IFSC Seminário — Linha 08
+                            </option>
+
+                            <option value="IFSC Progresso">
+                                IFSC Progresso — Linha 26
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="agenda-modos">
+
+                        <button class="agenda-modo ativo" data-modo="ida" onclick="selecionarModo(this)">
+                            Quero chegar no IFSC
+                        </button>
+
+                        <button class="agenda-modo" data-modo="volta" onclick="selecionarModo(this)">
+                            Estou saindo do IFSC
+                        </button>
+
+                    </div>
+
+
+                    <div class="agenda-campo">
+
+                        <label for="agenda-horario" id="agenda-horario-label">
+                            Horário que quero chegar
+                        </label>
+
+                        <input
+                            type="time"
+                            id="agenda-horario"
+                            value="13:30"
+                        >
+
+                    </div>
+
+
+                    <button class="agenda-botao" onclick="calcularAgenda()">
+                        Calcular melhor ônibus
+                    </button>
+
+                </div>
+
+
+                <div id="agenda-resultado">
+
+                    <p class="mensagem">
+                        Escolha o campus, o modo e informe o horário.
                     </p>
 
                 </div>
