@@ -1,42 +1,57 @@
 # IFSC Mobilidade
 
-Aplicação web que centraliza informações sobre o transporte público
-de Chapecó para estudantes que vão ao IFSC, com consulta de horários,
-cálculo de saldo do cartão estudante e um assistente com IA generativa.
+Aplicação web full stack que centraliza informações sobre o
+transporte público de Chapecó para estudantes que vão ao IFSC.
+Inclui consulta de horários, cálculo de saldo do cartão estudante,
+planejamento de agenda e um assistente virtual com inteligência
+artificial generativa.
 
 ---
 
 ## Problema
 
-Alunos do IFSC dependem de duas linhas de ônibus (Linha 08 — Seminário
-e Linha 26 — Progresso) para chegar ao câmpus, mas não existe um canal
-único e acessível que reúna horários, regras de integração tarifária e
-informações sobre o cartão estudante. Isso gera dúvidas constantes,
-perda de ônibus e uso ineficiente do saldo do cartão.
+Alunos do IFSC dependem das linhas 08 (Seminário) e 26 (Progresso)
+para chegar ao câmpus, mas não existe um canal único e acessível
+que reúna horários, regras de integração tarifária e informações
+sobre o cartão estudante. Isso gera dúvidas constantes, perda de
+ônibus e uso ineficiente do saldo do cartão.
 
 ## Solução
 
-Um site com três módulos:
+Uma aplicação web com quatro módulos integrados:
 
-1. **Consulta de horários** — dados das linhas 08 e 26 com filtro por campus.
+1. **Consulta de horários** — dados completos das linhas 08 e 26,
+   com filtro por campus e destaque dos próximos horários.
+
 2. **Calculadora de saldo** — simula quantos dias o saldo dura,
-   considerando as regras de integração tarifária temporal de Chapecó.
-3. **Assistente com IA** — chat em linguagem natural que responde
-   dúvidas sobre horários, tempo de viagem, integração e cartão,
-   usando IA generativa real (Google Gemini).
+   aplicando as regras de integração tarifária temporal de Chapecó
+   (1 integração a cada 2 passagens pagas).
+
+3. **Agenda de transporte** — o usuário informa o horário que quer
+   chegar no IFSC ou o horário que sai da aula, e o sistema calcula
+   qual ônibus pegar, com margem de segurança.
+
+4. **Assistente com IA** — chat em linguagem natural que responde
+   dúvidas sobre horários, cálculo de saldo, integração e cartão,
+   usando IA generativa real do Google Gemini.
 
 ## Papel da IA
 
-O módulo de IA é o **assistente virtual** disponível na aba "Assistente".
-Ele recebe a pergunta do usuário em linguagem natural e gera uma
-resposta personalizada com base nos dados reais do sistema, que são
-injetados como contexto antes da chamada ao modelo.
+O assistente virtual é o módulo de IA do projeto. Ele recebe a
+pergunta do usuário em linguagem natural e gera uma resposta
+personalizada com base nos dados reais do sistema, injetados
+como contexto antes da chamada ao modelo.
 
-Isso permite responder perguntas abertas ("quanto tempo até o Seminário?",
-"como funciona a integração?", "onde faço o cartão?") sem precisar
-cadastrar respostas prontas no código.
+Isso permite responder perguntas abertas sem precisar cadastrar
+respostas prontas no código. Exemplos:
 
-**Modelo utilizado:** `gemini-3.8-flash` (Google AI Studio).
+- "Qual o próximo ônibus para o Seminário?"
+- "Recarreguei 100 reais dia 2, faço 4 viagens por dia, quanto tenho?"
+- "Como funciona a integração tarifária?"
+- "Quanto tempo leva até o Progresso?"
+
+**Modelo utilizado:** `gemini-2.5-flash-lite` (Google AI Studio),
+com fallback automático entre 4 modelos em caso de sobrecarga.
 
 ## Arquitetura
 
@@ -49,12 +64,14 @@ Frontend (HTML + CSS + JS)
   ▼
 Backend (Node.js + Express)
   │
-  ├──► /api/horarios ........... dados locais de horários
-  ├──► /api/calcular-saldo ..... regras de integração tarifária
-  └──► /api/ia ................. chamada ao Google Gemini
-                                     │
-                                     ▼
-                             API generativa do Google
+  ├──► GET  /api/horarios ......... lista de horários das linhas
+  ├──► POST /api/calcular-saldo ... cálculo de saldo com integração
+  ├──► POST /api/agenda ........... cálculo de ida e volta do IFSC
+  └──► POST /api/ia ............... chamada ao Google Gemini
+                                       │
+                                       ▼
+                                Google Gemini API
+                                (geração de texto)
 ```
 
 - **Frontend:** HTML, CSS e JavaScript puro (sem frameworks).
@@ -68,14 +85,14 @@ Backend (Node.js + Express)
 ### 1. Clonar o repositório e instalar dependências
 
 ```bash
-git clone https://github.com/arch1997/ifsc-transporte.git
+git clone https://github.com/arch1997/ifsc-mobilidade.git
 cd ifsc-mobilidade
 npm install
 ```
 
 ### 2. Configurar a chave da API do Gemini
 
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env` na raiz do projeto copiando o exemplo:
 
 ```bash
 cp .env.example .env
@@ -110,9 +127,11 @@ Abra o arquivo `frontend/index.html` diretamente no navegador
 
 ### 5. Testar a aplicação
 
-- **Aba Horários** — escolha o campus e clique em "Ver horários".
-- **Aba Cartão** — preencha saldo, passagem e viagens, clique em "Calcular".
-- **Aba Assistente** — envie perguntas em linguagem natural para a IA.
+- **Início** — apresentação do projeto
+- **Assistente** — envie perguntas em linguagem natural para a IA
+- **Horários** — escolha o campus e veja os horários
+- **Agenda** — informe um horário e veja qual ônibus pegar
+- **Cartão** — calcule quantos dias o saldo dura
 
 ---
 
@@ -121,10 +140,10 @@ Abra o arquivo `frontend/index.html` diretamente no navegador
 ```
 ifsc-mobilidade/
 ├── backend/
-│   └── server.js          # API Express
+│   └── server.js          # API Express com 4 rotas autorais
 ├── frontend/
-│   ├── index.html         # Interface
-│   ├── style.css          # Estilos
+│   ├── index.html         # Interface com 5 telas
+│   ├── style.css          # Estilos responsivos
 │   ├── script.js          # Lógica de chamadas à API
 │   └── imgs/              # Imagens do projeto
 ├── .env.example           # Modelo de variáveis de ambiente
@@ -138,11 +157,36 @@ ifsc-mobilidade/
 
 ## Endpoints da API
 
-| Método | Rota                    | Descrição                              |
-|--------|-------------------------|----------------------------------------|
-| GET    | `/api/horarios`         | Retorna a lista de horários em JSON    |
-| POST   | `/api/calcular-saldo`   | Calcula dias restantes do cartão       |
-| POST   | `/api/ia`               | Envia pergunta ao assistente com IA    |
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/api/horarios` | Lista horários das linhas 08 e 26 |
+| POST | `/api/calcular-saldo` | Calcula dias restantes do cartão |
+| POST | `/api/agenda` | Calcula ônibus ideal para ida ou volta |
+| POST | `/api/ia` | Assistente com IA generativa |
+
+### Exemplo — `/api/calcular-saldo`
+
+**Requisição:**
+
+```json
+POST /api/calcular-saldo
+{
+  "saldo": 50,
+  "valorPassagem": 2.45,
+  "viagensPorDia": 2
+}
+```
+
+**Resposta:**
+
+```json
+{
+  "saldoAtual": 50,
+  "diasSemIntegracao": 10,
+  "diasComIntegracao": 20,
+  "economiaTotal": 24.5
+}
+```
 
 ### Exemplo — `/api/ia`
 
@@ -161,7 +205,8 @@ POST /api/ia
 {
   "pergunta": "qual o próximo ônibus para o seminário?",
   "resposta": "O próximo ônibus para o IFSC Seminário é a Linha 08,
-  saindo às 14:20, com previsão de viagem de 15 a 25 minutos."
+  saindo às 14:20, com previsão de viagem de 15 a 25 minutos.",
+  "modelo": "gemini-2.5-flash-lite"
 }
 ```
 
@@ -169,15 +214,16 @@ POST /api/ia
 
 ## Tecnologias utilizadas
 
-- Node.js
-- Express
-- Google Generative AI SDK (@google/generative-ai)
-- HTML, CSS e JavaScript
-- dotenv
+- **Node.js** — runtime do backend
+- **Express** — framework HTTP
+- **@google/generative-ai** — SDK oficial do Gemini
+- **dotenv** — variáveis de ambiente
+- **HTML5, CSS3, JavaScript (ES6+)** — frontend sem frameworks
 
 ---
 
 ## Projeto acadêmico
 
-Desenvolvido como MVP para o desafio de aplicação web com IA e
-arquitetura full stack integrada.
+Desenvolvido como MVP para o desafio de aplicação web com
+inteligência artificial e arquitetura full stack integrada,
+do curso técnico em Informática do IFSC — Chapecó.
