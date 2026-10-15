@@ -25,6 +25,31 @@ function trocarTela(nome) {
 
 
 
+function selecionarModo(el) {
+
+    document.querySelectorAll(".agenda-modo").forEach(m => {
+        m.classList.remove("ativo");
+    });
+
+    el.classList.add("ativo");
+
+    const modo = el.getAttribute("data-modo");
+
+    const label = document.getElementById("agenda-horario-label");
+    const input = document.getElementById("agenda-horario");
+
+    if (modo === "ida") {
+        label.textContent = "Horário que quero chegar";
+        input.value = "13:30";
+    } else {
+        label.textContent = "Horário que saio do IFSC";
+        input.value = "17:00";
+    }
+
+}
+
+
+
 function selecionarDestino(el) {
 
     document.querySelectorAll(".horario-tab").forEach(t => {
@@ -99,6 +124,194 @@ async function buscarHorarios() {
         html += `</div>`;
 
         resultado.innerHTML = html;
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        resultado.innerHTML = "<p class='mensagem'>Não foi possível conectar com o servidor.</p>";
+
+    }
+
+}
+
+
+
+async function calcularAgenda() {
+
+    const campus = document.getElementById("agenda-campus").value;
+    const horarioUsuario = document.getElementById("agenda-horario").value;
+
+    const modoSelecionado = document.querySelector(".agenda-modo.ativo");
+    const modo = modoSelecionado ? modoSelecionado.getAttribute("data-modo") : "ida";
+
+    const resultado = document.getElementById("agenda-resultado");
+
+    if (!horarioUsuario) {
+        resultado.innerHTML = "<p class='mensagem'>Informe o horário.</p>";
+        return;
+    }
+
+    resultado.innerHTML = "<p class='mensagem'>Calculando...</p>";
+
+    try {
+
+        const resposta = await fetch("http://localhost:3000/api/agenda", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                modo: modo,
+                campus: campus,
+                horarioUsuario: horarioUsuario
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            resultado.innerHTML = `<p class='mensagem'>${dados.erro}</p>`;
+            return;
+        }
+
+        if (dados.modo === "ida") {
+
+            let statusClasse = "ok";
+            let statusTexto = "Margem confortável";
+
+            if (dados.margemSobra < 5) {
+                statusClasse = "apertado";
+                statusTexto = "Margem apertada — considere pegar o anterior";
+            }
+            if (dados.margemSobra < 0) {
+                statusClasse = "atrasado";
+                statusTexto = "Você pode se atrasar com esse ônibus";
+            }
+
+            resultado.innerHTML = `
+
+                <div class="agenda-resultado">
+
+                    <div class="agenda-header">
+                        <span class="agenda-header-tag">Ida para o IFSC</span>
+                        <h3>Quero chegar às ${dados.horarioDesejado}</h3>
+                    </div>
+
+
+                    <div class="agenda-resultado-topo">
+
+                        <div class="agenda-destaque">
+
+                            <span class="agenda-destaque-tag">Pegue este ônibus</span>
+
+                            <div class="agenda-destaque-horario">
+                                ${dados.horarioOnibus}
+                            </div>
+
+                            <p class="agenda-destaque-desc">
+                                ${dados.linha} — Terminal Urbano
+                            </p>
+
+                        </div>
+
+
+                        <div class="agenda-destaque agenda-destaque-verde">
+
+                            <span class="agenda-destaque-tag">Chegada estimada</span>
+
+                            <div class="agenda-destaque-horario">
+                                ${dados.chegadaMin} - ${dados.chegadaMax}
+                            </div>
+
+                            <p class="agenda-destaque-desc">
+                                Tempo de viagem: ${dados.tempoEstimado} min
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="agenda-status ${statusClasse}">
+
+                        <span class="agenda-status-titulo">Margem até o horário desejado</span>
+
+                        <span class="agenda-status-valor">
+                            ${dados.margemSobra > 0 ? "+" : ""}${dados.margemSobra} minutos
+                        </span>
+
+                        <span class="agenda-status-desc">${statusTexto}</span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        } else {
+
+            resultado.innerHTML = `
+
+                <div class="agenda-resultado">
+
+                    <div class="agenda-header">
+                        <span class="agenda-header-tag">Volta pra casa</span>
+                        <h3>Saio do IFSC às ${dados.horarioSaidaUsuario}</h3>
+                    </div>
+
+
+                    <div class="agenda-resultado-topo">
+
+                        <div class="agenda-destaque">
+
+                            <span class="agenda-destaque-tag">Ônibus passa no IFSC</span>
+
+                            <div class="agenda-destaque-horario">
+                                ${dados.horarioOnibus}
+                            </div>
+
+                            <p class="agenda-destaque-desc">
+                                ${dados.linha} — indo pro Terminal
+                            </p>
+
+                        </div>
+
+
+                        <div class="agenda-destaque agenda-destaque-verde">
+
+                            <span class="agenda-destaque-tag">Chegada no Terminal</span>
+
+                            <div class="agenda-destaque-horario">
+                                ${dados.chegadaMin} - ${dados.chegadaMax}
+                            </div>
+
+                            <p class="agenda-destaque-desc">
+                                Tempo de viagem: ${dados.tempoEstimado} min
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="agenda-status ok">
+
+                        <span class="agenda-status-titulo">Espera no ponto do IFSC</span>
+
+                        <span class="agenda-status-valor">
+                            ${dados.espera > 0 ? dados.espera + " minutos" : "Ônibus já está no ponto"}
+                        </span>
+
+                        <span class="agenda-status-desc">
+                            Inclui tempo médio de embarque dos estudantes no fim da aula
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
 
     } catch (erro) {
 
