@@ -1,580 +1,110 @@
 // ============================================================
-// CACHE OFFLINE
+// Dados offline do IFSC Mobilidade
+// Esses dados estão EMBUTIDOS no site.
+// Se a internet cair, o site usa eles automaticamente.
 // ============================================================
 
-const CACHE_KEY = "ifsc_mobilidade_cache";
-const CACHE_TTL = 1000 * 60 * 60 * 24;
+const DADOS_OFFLINE = {
 
-function salvarCache(chave, dados) {
-    try {
-        localStorage.setItem(CACHE_KEY + "_" + chave, JSON.stringify({
-            dados: dados,
-            timestamp: Date.now()
-        }));
-    } catch (e) {
-        console.log("Cache indisponível");
-    }
-}
+    horarios: [
 
-function lerCache(chave) {
-    try {
-        const item = localStorage.getItem(CACHE_KEY + "_" + chave);
-        if (!item) return null;
-        const obj = JSON.parse(item);
-        if (Date.now() - obj.timestamp > CACHE_TTL) {
-            localStorage.removeItem(CACHE_KEY + "_" + chave);
-            return null;
-        }
-        return obj.dados;
-    } catch (e) {
-        return null;
-    }
-}
+        // Linha 08 — Seminário
+        { id: 1, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "05:35", tempoEstimado: "15-25" },
+        { id: 2, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "06:10", tempoEstimado: "15-25" },
+        { id: 3, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "06:35", tempoEstimado: "15-25" },
+        { id: 4, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "06:50", tempoEstimado: "15-25" },
+        { id: 5, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "07:10", tempoEstimado: "15-25" },
+        { id: 6, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "07:30", tempoEstimado: "15-25" },
+        { id: 7, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "07:45", tempoEstimado: "15-25" },
+        { id: 8, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "08:05", tempoEstimado: "15-25" },
+        { id: 9, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "08:20", tempoEstimado: "15-25" },
+        { id: 10, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "09:00", tempoEstimado: "15-25" },
+        { id: 11, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "09:40", tempoEstimado: "15-25" },
+        { id: 12, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "10:20", tempoEstimado: "15-25" },
+        { id: 13, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "11:00", tempoEstimado: "15-25" },
+        { id: 14, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "11:35", tempoEstimado: "15-25" },
+        { id: 15, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "11:45", tempoEstimado: "15-25" },
+        { id: 16, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "12:10", tempoEstimado: "15-25" },
+        { id: 17, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "12:20", tempoEstimado: "15-25" },
+        { id: 18, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "12:40", tempoEstimado: "15-25" },
+        { id: 19, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "13:05", tempoEstimado: "15-25" },
+        { id: 20, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "13:15", tempoEstimado: "15-25" },
+        { id: 21, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "13:30", tempoEstimado: "15-25" },
+        { id: 22, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "13:50", tempoEstimado: "15-25" },
+        { id: 23, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "14:20", tempoEstimado: "15-25" },
+        { id: 24, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "14:50", tempoEstimado: "15-25" },
+        { id: 25, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "15:30", tempoEstimado: "15-25" },
+        { id: 26, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "16:00", tempoEstimado: "15-25" },
+        { id: 27, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "16:15", tempoEstimado: "15-25" },
+        { id: 28, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "16:30", tempoEstimado: "15-25" },
+        { id: 29, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "16:50", tempoEstimado: "15-25" },
+        { id: 30, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "17:15", tempoEstimado: "15-25" },
+        { id: 31, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "17:20", tempoEstimado: "15-25" },
+        { id: 32, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "17:35", tempoEstimado: "15-25" },
+        { id: 33, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "17:45", tempoEstimado: "15-25" },
+        { id: 34, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "18:00", tempoEstimado: "15-25" },
+        { id: 35, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "18:10", tempoEstimado: "15-25" },
+        { id: 36, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "18:25", tempoEstimado: "15-25" },
+        { id: 37, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "18:35", tempoEstimado: "15-25" },
+        { id: 38, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "18:45", tempoEstimado: "15-25" },
+        { id: 39, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "19:00", tempoEstimado: "15-25" },
+        { id: 40, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "19:30", tempoEstimado: "15-25" },
+        { id: 41, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "20:00", tempoEstimado: "15-25" },
+        { id: 42, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "20:40", tempoEstimado: "15-25" },
+        { id: 43, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "21:15", tempoEstimado: "15-25" },
+        { id: 44, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "21:45", tempoEstimado: "15-25" },
+        { id: 45, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "21:55", tempoEstimado: "15-25" },
+        { id: 46, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "22:10", tempoEstimado: "15-25" },
+        { id: 47, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "22:40", tempoEstimado: "15-25" },
+        { id: 48, linha: "Linha 08", origem: "Terminal Urbano", destino: "IFSC Seminário", horario: "23:00", tempoEstimado: "15-25" },
 
-function estaOnline() {
-    return navigator.onLine;
-}
+        // Linha 26 — Progresso
+        { id: 100, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "04:50", tempoEstimado: "8-15" },
+        { id: 101, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "05:30", tempoEstimado: "8-15" },
+        { id: 102, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "05:55", tempoEstimado: "8-15" },
+        { id: 103, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "06:20", tempoEstimado: "8-15" },
+        { id: 104, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "06:45", tempoEstimado: "8-15" },
+        { id: 105, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "07:05", tempoEstimado: "8-15" },
+        { id: 106, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "07:20", tempoEstimado: "8-15" },
+        { id: 107, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "07:40", tempoEstimado: "8-15" },
+        { id: 108, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "08:00", tempoEstimado: "8-15" },
+        { id: 109, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "08:40", tempoEstimado: "8-15" },
+        { id: 110, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "09:20", tempoEstimado: "8-15" },
+        { id: 111, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "10:00", tempoEstimado: "8-15" },
+        { id: 112, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "10:40", tempoEstimado: "8-15" },
+        { id: 113, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "11:20", tempoEstimado: "8-15" },
+        { id: 114, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "11:40", tempoEstimado: "8-15" },
+        { id: 115, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "12:05", tempoEstimado: "8-15" },
+        { id: 116, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "12:35", tempoEstimado: "8-15" },
+        { id: 117, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "12:50", tempoEstimado: "8-15" },
+        { id: 118, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "13:20", tempoEstimado: "8-15" },
+        { id: 119, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "13:40", tempoEstimado: "8-15" },
+        { id: 120, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "14:20", tempoEstimado: "8-15" },
+        { id: 121, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "15:00", tempoEstimado: "8-15" },
+        { id: 122, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "15:40", tempoEstimado: "8-15" },
+        { id: 123, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "16:20", tempoEstimado: "8-15" },
+        { id: 124, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "17:00", tempoEstimado: "8-15" },
+        { id: 125, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "17:40", tempoEstimado: "8-15" },
+        { id: 126, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "18:05", tempoEstimado: "8-15" },
+        { id: 127, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "18:20", tempoEstimado: "8-15" },
+        { id: 128, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "18:50", tempoEstimado: "8-15" },
+        { id: 129, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "19:20", tempoEstimado: "8-15" },
+        { id: 130, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "20:10", tempoEstimado: "8-15" },
+        { id: 131, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "20:50", tempoEstimado: "8-15" },
+        { id: 132, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "21:30", tempoEstimado: "8-15" },
+        { id: 133, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "22:00", tempoEstimado: "8-15" },
+        { id: 134, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "22:40", tempoEstimado: "8-15" },
+        { id: 135, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "23:00", tempoEstimado: "8-15" },
+        { id: 136, linha: "Linha 26", origem: "Terminal Urbano", destino: "IFSC Progresso", horario: "23:40", tempoEstimado: "8-15" }
+    ],
 
-async function fetchComFallback(url, chaveCache, dadosOffline) {
+    tarifa: 2.45,
 
-    if (estaOnline()) {
-        try {
-            const resposta = await fetch(url);
-            if (resposta.ok) {
-                const dados = await resposta.json();
-                salvarCache(chaveCache, dados);
-                return dados;
-            }
-        } catch (e) {
-            console.log("Falha na API, usando cache/dados offline");
-        }
-    }
-
-    const cache = lerCache(chaveCache);
-    if (cache) {
-        console.log("Usando dados do cache");
-        return cache;
-    }
-
-    console.log("Usando dados offline embutidos");
-    return dadosOffline;
-}
-
-
-// ============================================================
-// NAVEGAÇÃO ENTRE TELAS
-// ============================================================
-
-function trocarTela(nome) {
-
-    document.querySelectorAll(".tela").forEach(t => {
-        t.classList.remove("ativa");
-    });
-
-    document.querySelectorAll(".nav-link").forEach(l => {
-        l.classList.remove("ativo");
-    });
-
-    const tela = document.getElementById("tela-" + nome);
-
-    if (tela) tela.classList.add("ativa");
-
-    document.querySelectorAll(".nav-link").forEach(l => {
-        const attr = l.getAttribute("onclick") || "";
-        if (attr.includes("'" + nome + "'")) {
-            l.classList.add("ativo");
-        }
-    });
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-
-}
-
-
-// ============================================================
-// INDICADOR DE CONEXÃO
-// ============================================================
-
-function atualizarIndicador() {
-
-    let indicador = document.getElementById("indicador-conexao");
-
-    if (!indicador) {
-        indicador = document.createElement("div");
-        indicador.id = "indicador-conexao";
-        document.body.appendChild(indicador);
-    }
-
-    if (estaOnline()) {
-        indicador.className = "indicador-online";
-        indicador.textContent = "Online";
-    } else {
-        indicador.className = "indicador-online offline";
-        indicador.textContent = "Offline — dados salvos";
+    config: {
+        tempoSeminarioMin: 15,
+        tempoSeminarioMax: 25,
+        tempoProgressoMin: 8,
+        tempoProgressoMax: 15
     }
 
-}
-
-window.addEventListener("online", atualizarIndicador);
-window.addEventListener("offline", atualizarIndicador);
-
-
-// ============================================================
-// AGENDA — SELEÇÃO DE MODO
-// ============================================================
-
-function selecionarModo(el) {
-
-    document.querySelectorAll(".agenda-modo").forEach(m => {
-        m.classList.remove("ativo");
-    });
-
-    el.classList.add("ativo");
-
-    const modo = el.getAttribute("data-modo");
-
-    const label = document.getElementById("agenda-horario-label");
-    const input = document.getElementById("agenda-horario");
-
-    if (modo === "ida") {
-        label.textContent = "Horário que quero chegar";
-        input.value = "13:30";
-    } else {
-        label.textContent = "Horário que saio do IFSC";
-        input.value = "17:00";
-    }
-
-}
-
-
-// ============================================================
-// HORÁRIOS — SELEÇÃO DE CAMPUS
-// ============================================================
-
-function selecionarDestino(el) {
-
-    document.querySelectorAll(".horario-tab").forEach(t => {
-        t.classList.remove("ativo");
-    });
-
-    el.classList.add("ativo");
-
-    const destino = el.getAttribute("data-destino");
-
-    document.getElementById("destino").value = destino;
-
-    const tempoInfo = document.getElementById("tempoEstimadoInfo");
-
-    if (destino === "IFSC Seminário") {
-        tempoInfo.textContent = "15-25 min";
-    } else {
-        tempoInfo.textContent = "8-15 min";
-    }
-
-    const resultado = document.getElementById("resultado");
-
-    resultado.innerHTML = "<p class='mensagem'>Clique em Ver horários para consultar.</p>";
-
-}
-
-
-// ============================================================
-// BUSCAR HORÁRIOS
-// ============================================================
-
-async function buscarHorarios() {
-
-    const destino = document.getElementById("destino").value;
-    const resultado = document.getElementById("resultado");
-
-    resultado.innerHTML = "<p class='mensagem'>Buscando horários...</p>";
-
-    try {
-
-        const horarios = await fetchComFallback(
-            "http://localhost:3000/api/horarios",
-            "horarios",
-            DADOS_OFFLINE.horarios
-        );
-
-        const filtrados = horarios
-            .filter(h => h.destino === destino)
-            .sort((a, b) => a.horario.localeCompare(b.horario));
-
-        if (filtrados.length === 0) {
-            resultado.innerHTML = "<p class='mensagem'>Nenhum horário encontrado.</p>";
-            return;
-        }
-
-        const agora = new Date();
-        const hh = String(agora.getHours()).padStart(2, "0");
-        const mm = String(agora.getMinutes()).padStart(2, "0");
-        const agoraStr = `${hh}:${mm}`;
-
-        let html = `<div class="horarios-grid">`;
-
-        filtrados.forEach(h => {
-            const passou = h.horario < agoraStr;
-            html += `
-                <div class="horario-card ${passou ? 'passou' : ''}">
-                    <span class="horario-hora">${h.horario}</span>
-                    <span class="horario-linha">${h.linha}</span>
-                </div>
-            `;
-        });
-
-        html += `</div>`;
-
-        if (!estaOnline()) {
-            html += `<p class="aviso-offline">Modo offline — mostrando dados salvos</p>`;
-        }
-
-        resultado.innerHTML = html;
-
-    } catch (erro) {
-        console.error(erro);
-        resultado.innerHTML = "<p class='mensagem'>Não foi possível carregar os horários.</p>";
-    }
-
-}
-
-
-// ============================================================
-// CALCULAR AGENDA
-// ============================================================
-
-async function calcularAgenda() {
-
-    const campus = document.getElementById("agenda-campus").value;
-    const horarioUsuario = document.getElementById("agenda-horario").value;
-
-    const modoSelecionado = document.querySelector(".agenda-modo.ativo");
-    const modo = modoSelecionado ? modoSelecionado.getAttribute("data-modo") : "ida";
-
-    const resultado = document.getElementById("agenda-resultado");
-
-    if (!horarioUsuario) {
-        resultado.innerHTML = "<p class='mensagem'>Informe o horário.</p>";
-        return;
-    }
-
-    resultado.innerHTML = "<p class='mensagem'>Calculando...</p>";
-
-    try {
-
-        const resposta = await fetch("http://localhost:3000/api/agenda", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ modo, campus, horarioUsuario })
-        });
-
-        const dados = await resposta.json();
-
-        if (!resposta.ok) {
-            resultado.innerHTML = `<p class='mensagem'>${dados.erro}</p>`;
-            return;
-        }
-
-        if (dados.modo === "ida") {
-
-            let statusClasse = "ok";
-            let statusTexto = "Margem confortável";
-
-            if (dados.margemSobra < 5) {
-                statusClasse = "apertado";
-                statusTexto = "Margem apertada — considere pegar o anterior";
-            }
-            if (dados.margemSobra < 0) {
-                statusClasse = "atrasado";
-                statusTexto = "Você pode se atrasar com esse ônibus";
-            }
-
-            resultado.innerHTML = `
-
-                <div class="agenda-resultado">
-
-                    <div class="agenda-header">
-                        <span class="agenda-header-tag">Ida para o IFSC</span>
-                        <h3>Quero chegar às ${dados.horarioDesejado}</h3>
-                    </div>
-
-                    <div class="agenda-resultado-topo">
-
-                        <div class="agenda-destaque">
-                            <span class="agenda-destaque-tag">Pegue este ônibus</span>
-                            <div class="agenda-destaque-horario">${dados.horarioOnibus}</div>
-                            <p class="agenda-destaque-desc">${dados.linha} — Terminal Urbano</p>
-                        </div>
-
-                        <div class="agenda-destaque agenda-destaque-verde">
-                            <span class="agenda-destaque-tag">Chegada estimada</span>
-                            <div class="agenda-destaque-horario">${dados.chegadaMin} - ${dados.chegadaMax}</div>
-                            <p class="agenda-destaque-desc">Tempo de viagem: ${dados.tempoEstimado} min</p>
-                        </div>
-
-                    </div>
-
-                    <div class="agenda-status ${statusClasse}">
-                        <span class="agenda-status-titulo">Margem até o horário desejado</span>
-                        <span class="agenda-status-valor">${dados.margemSobra > 0 ? "+" : ""}${dados.margemSobra} minutos</span>
-                        <span class="agenda-status-desc">${statusTexto}</span>
-                    </div>
-
-                </div>
-
-            `;
-
-        } else {
-
-            resultado.innerHTML = `
-
-                <div class="agenda-resultado">
-
-                    <div class="agenda-header">
-                        <span class="agenda-header-tag">Volta pra casa</span>
-                        <h3>Saio do IFSC às ${dados.horarioSaidaUsuario}</h3>
-                    </div>
-
-                    <div class="agenda-resultado-topo">
-
-                        <div class="agenda-destaque">
-                            <span class="agenda-destaque-tag">Ônibus passa no IFSC</span>
-                            <div class="agenda-destaque-horario">${dados.horarioOnibus}</div>
-                            <p class="agenda-destaque-desc">${dados.linha} — indo pro Terminal</p>
-                        </div>
-
-                        <div class="agenda-destaque agenda-destaque-verde">
-                            <span class="agenda-destaque-tag">Chegada no Terminal</span>
-                            <div class="agenda-destaque-horario">${dados.chegadaMin} - ${dados.chegadaMax}</div>
-                            <p class="agenda-destaque-desc">Tempo de viagem: ${dados.tempoEstimado} min</p>
-                        </div>
-
-                    </div>
-
-                    <div class="agenda-status ok">
-                        <span class="agenda-status-titulo">Espera no ponto do IFSC</span>
-                        <span class="agenda-status-valor">${dados.espera > 0 ? dados.espera + " minutos" : "Ônibus já está no ponto"}</span>
-                        <span class="agenda-status-desc">Inclui tempo médio de embarque dos estudantes no fim da aula</span>
-                    </div>
-
-                </div>
-
-            `;
-
-        }
-
-    } catch (erro) {
-        console.error(erro);
-        resultado.innerHTML = "<p class='mensagem'>Não foi possível conectar com o servidor.</p>";
-    }
-
-}
-
-
-// ============================================================
-// CALCULAR SALDO
-// ============================================================
-
-async function calcularSaldo() {
-
-    const saldo = Number(document.getElementById("saldo").value);
-    const valorPassagem = Number(document.getElementById("valorPassagem").value);
-    const viagensPorDia = Number(document.getElementById("viagensPorDia").value);
-
-    const resultado = document.getElementById("resultadoSaldo");
-
-    if (
-        isNaN(saldo) || saldo < 0 ||
-        isNaN(valorPassagem) || valorPassagem <= 0 ||
-        isNaN(viagensPorDia) || viagensPorDia <= 0
-    ) {
-        resultado.innerHTML = "<p class='mensagem'>Preencha todos os campos corretamente.</p>";
-        return;
-    }
-
-    resultado.innerHTML = "<p class='mensagem'>Calculando...</p>";
-
-    // Cálculo local — sempre funciona, mesmo offline
-    const viagensDisponiveisSemIntegracao = Math.floor(saldo / valorPassagem);
-    const diasSemIntegracao = Math.floor(viagensDisponiveisSemIntegracao / viagensPorDia);
-    const passagensCobradasPorDia = Math.ceil(viagensPorDia / 2);
-    const custoDiarioComIntegracao = passagensCobradasPorDia * valorPassagem;
-    const diasComIntegracao = Math.floor(saldo / custoDiarioComIntegracao);
-    const custoDiarioSemIntegracao = viagensPorDia * valorPassagem;
-    const economiaPorDia = custoDiarioSemIntegracao - custoDiarioComIntegracao;
-    const economiaTotal = economiaPorDia * diasComIntegracao;
-    const saldoRestante = saldo - (diasComIntegracao * custoDiarioComIntegracao);
-
-    resultado.innerHTML = `
-
-        <div class="calc-resultado">
-
-            <div class="calc-resultado-topo">
-
-                <div class="calc-destaque">
-                    <span class="calc-destaque-tag">Com integração</span>
-                    <div class="calc-destaque-valor">${diasComIntegracao} <span class="calc-destaque-unidade">dias</span></div>
-                    <p class="calc-destaque-desc">de transporte com o saldo atual</p>
-                </div>
-
-                <div class="calc-destaque calc-destaque-verde">
-                    <span class="calc-destaque-tag">Economia total</span>
-                    <div class="calc-destaque-valor"><span class="calc-moeda">R$</span> ${economiaTotal.toFixed(2)}</div>
-                    <p class="calc-destaque-desc">em relação a não usar integração</p>
-                </div>
-
-            </div>
-
-            <div class="calc-comparativo">
-
-                <div class="calc-coluna">
-                    <div class="calc-coluna-titulo">Sem integração</div>
-                    <div class="calc-linha"><span>Viagens possíveis</span><strong>${viagensDisponiveisSemIntegracao}</strong></div>
-                    <div class="calc-linha"><span>Dias de transporte</span><strong>${diasSemIntegracao}</strong></div>
-                </div>
-
-                <div class="calc-coluna">
-                    <div class="calc-coluna-titulo">Com integração (1h)</div>
-                    <div class="calc-linha"><span>Passagens por dia</span><strong>${passagensCobradasPorDia}</strong></div>
-                    <div class="calc-linha"><span>Custo diário</span><strong>R$ ${custoDiarioComIntegracao.toFixed(2)}</strong></div>
-                </div>
-
-            </div>
-
-            <div class="calc-rodape">
-                <div class="calc-linha"><span>Saldo restante</span><strong>R$ ${saldoRestante.toFixed(2)}</strong></div>
-                <div class="calc-linha"><span>Economia por dia</span><strong>R$ ${economiaPorDia.toFixed(2)}</strong></div>
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-// ============================================================
-// CHAT COM IA
-// ============================================================
-
-function perguntaRapida(texto) {
-    document.getElementById("perguntaIA").value = texto;
-    perguntarIA();
-}
-
-
-async function perguntarIA() {
-
-    const input = document.getElementById("perguntaIA");
-    const chat = document.getElementById("chat");
-
-    const pergunta = input.value.trim();
-
-    if (!pergunta) return;
-
-    chat.innerHTML += `
-
-        <div class="msg-usuario">
-            <div class="msg-bubble">
-                ${pergunta}
-                <span class="msg-hora">agora <span class="msg-check">✓✓</span></span>
-            </div>
-        </div>
-
-    `;
-
-    input.value = "";
-
-    const idDigitando = "digitando-" + Date.now();
-
-    chat.innerHTML += `
-
-        <div class="msg-ia" id="${idDigitando}">
-            <div class="msg-bubble">
-                <span class="typing">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-            </div>
-        </div>
-
-    `;
-
-    chat.scrollTop = chat.scrollHeight;
-
-    try {
-
-        const resposta = await fetch("http://localhost:3000/api/ia", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                mensagem: pergunta,
-                usuarioId: "usuario-web"
-            })
-        });
-
-        const dados = await resposta.json();
-
-        document.getElementById(idDigitando).remove();
-
-        if (!resposta.ok) {
-
-            chat.innerHTML += `
-
-                <div class="msg-ia">
-                    <div class="msg-bubble">
-                        Não foi possível gerar a resposta no momento.
-                        <span class="msg-hora">agora</span>
-                    </div>
-                </div>
-
-            `;
-
-            chat.scrollTop = chat.scrollHeight;
-            return;
-
-        }
-
-        const fonteTexto = dados.fonte === "local" ? "resposta local" : "resposta online";
-
-        chat.innerHTML += `
-
-            <div class="msg-ia">
-                <div class="msg-bubble">
-                    ${dados.resposta.replace(/\n/g, "<br>")}
-                    <span class="msg-hora">agora · ${fonteTexto}</span>
-                </div>
-            </div>
-
-        `;
-
-        chat.scrollTop = chat.scrollHeight;
-
-    } catch (erro) {
-
-        console.error(erro);
-
-        document.getElementById(idDigitando).remove();
-
-        chat.innerHTML += `
-
-            <div class="msg-ia">
-                <div class="msg-bubble">
-                    Não foi possível conectar com o servidor.
-                    <span class="msg-hora">agora</span>
-                </div>
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-// ============================================================
-// INICIALIZAÇÃO
-// ============================================================
-
-document.addEventListener("DOMContentLoaded", atualizarIndicador);
+};
