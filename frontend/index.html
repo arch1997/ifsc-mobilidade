@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IFSC Mobilidade</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <nav class="navbar">
+
+        <div class="nav-content">
+
+            <div class="nav-logo">
+                <span class="logo-mark">IFSC</span>
+                <span class="logo-text">Mobilidade</span>
+            </div>
+
+            <ul class="nav-links">
+
+                <li><a href="#" class="nav-link ativo" onclick="trocarTela('inicio'); return false;">Início</a></li>
+
+                <li><a href="#" class="nav-link" onclick="trocarTela('assistente'); return false;">Assistente</a></li>
+
+                <li><a href="#" class="nav-link" onclick="trocarTela('horarios'); return false;">Horários</a></li>
+
+                <li><a href="#" class="nav-link" onclick="trocarTela('cartao'); return false;">Cartão</a></li>
+
+            </ul>
+
+            <a href="#" class="nav-cta" onclick="trocarTela('assistente'); return false;">Começar</a>
+
+        </div>
+
+    </nav>
+
+
+
+    <main>
+
+
+        <section class="tela ativa" id="tela-inicio">
+
+            <div class="hero">
+
+                <h1 class="hero-title">
+                    O ônibus certo,<br>
+                    na hora certa.
+                </h1>
+
+                <p class="hero-subtitle">
+                    Consulte os horários das linhas 08 e 26, simule
+                    quanto ainda rende seu cartão e tire dúvidas
+                    sobre o transporte até o IFSC.
+                </p>
+
+                <div class="hero-actions">
+
+                    <a href="#" class="btn-primary" onclick="trocarTela('assistente'); return false;">
+                        Fazer uma pergunta
+                        <span class="arrow">→</span>
+                    </a>
+
+                    <a href="#" class="btn-ghost" onclick="trocarTela('cartao'); return false;">
+                        Sobre o cartão
+                    </a>
+
+                </div>
+
+
+
+                <div class="hero-visual">
+
+                    <div class="float-card cartao-img cartao-1">
+
+                        <img
+                            src="imgs/cartao.png"
+                            alt="Cartão estudante IFSC"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        >
+
+                        <div class="cartao-fallback">
+
+                            <div class="cartao-fallback-top">
+                                <div class="cartao-fallback-chip"></div>
+                                <span class="cartao-fallback-marca">IFSC</span>
+                            </div>
+
+                            <div class="cartao-fallback-tipo">VALE TRANSPORTE</div>
+
+                            <div class="cartao-fallback-numero">
+                                •••• •••• •••• 2450
+                            </div>
+
+                            <div class="cartao-fallback-bottom">
+
+                                <div>
+                                    <span class="cartao-fallback-label">TITULAR</span>
+                                    <span class="cartao-fallback-valor">Estudante IFSC</span>
+                                </div>
+
+                                <div>
+                                    <span class="cartao-fallback-label">VALIDADE</span>
+                                    <span class="cartao-fallback-valor">12/27</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="float-card cartao-img cartao-3">
+
+                        <img
+                            src="imgs/cartao3.png"
+                            alt="Cartão estudante IFSC — frente"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        >
+
+                        <div class="cartao-fallback cartao-fallback-3">
+
+                            <div class="cartao-fallback-top">
+                                <div class="cartao-fallback-chip"></div>
+                                <span class="cartao-fallback-marca">IFSC</span>
+                            </div>
+
+                            <div class="cartao-fallback-tipo">VALE TRANSPORTE</div>
+
+                            <div class="cartao-fallback-numero">
+                                •••• •••• •••• 2450
+                            </div>
+
+                            <div class="cartao-fallback-bottom">
+
+                                <div>
+                                    <span class="cartao-fallback-label">TITULAR</span>
+                                    <span class="cartao-fallback-valor">Estudante IFSC</span>
+                                </div>
+
+                                <div>
+                                    <span class="cartao-fallback-label">VALIDADE</span>
+                                    <span class="cartao-fallback-valor">12/27</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="float-card cartao-img cartao-2">
+
+                        <img
+                            src="imgs/cartao2.png"
+                            alt="Cartão estudante IFSC — verso"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        >
+
+                        <div class="cartao-fallback cartao-fallback-2">
+
+                            <div class="cartao-fallback-top">
+                                <div class="cartao-fallback-chip"></div>
+                                <span class="cartao-fallback-marca">IFSC</span>
+                            </div>
+
+                            <div class="cartao-fallback-tipo">VALE TRANSPORTE</div>
+
+                            <div class="cartao-fallback-numero">
+                                •••• •••• •••• 2450
+                            </div>
+
+                            <div class="cartao-fallback-bottom">
+
+                                <div>
+                                    <span class="cartao-fallback-label">TITULAR</span>
+                                    <span class="cartao-fallback-valor">Estudante IFSC</span>
+                                </div>
+
+                                <div>
+                                    <span class="cartao-fallback-label">VALIDADE</span>
+                                    <span class="cartao-fallback-valor">12/27</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <section class="tela" id="tela-assistente">
+
+            <div class="page-inner">
+
+                <section class="assistente">
+
+                    <div class="wa-topbar">
+
+                        <button class="wa-back" type="button">
+
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2z"/></svg>
+
+                        </button>
+
+                        <div class="wa-avatar-top">
+
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                                <path d="M4 16V6C4 4.9 4.9 4 6 4H18C19.1 4 20 4.9 20 6V16C20 17.1 19.1 18 18 18H17V19C17 19.6 16.6 20 16 20C15.4 20 15 19.6 15 19V18H9V19C9 19.6 8.6 20 8 20C7.4 20 7 19.6 7 19V18H6C4.9 18 4 17.1 4 16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+
+                                <path d="M4 12H20" stroke="currentColor" stroke-width="1.8"/>
+
+                            </svg>
+
+                        </div>
+
+                        <div class="wa-info">
+
+                            <div class="wa-nome">Assistente IFSC</div>
+                            <div class="wa-status">online</div>
+
+                        </div>
+
+                        <div class="wa-acoes">
+
+                            <button class="wa-acao" type="button" title="Chamada">
+
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8C7.9 13.4 10.6 16.1 13.2 17.4L15.4 15.2C15.7 14.9 16.1 14.8 16.5 14.9C17.7 15.3 18.9 15.5 20.2 15.5C20.7 15.5 21.1 15.9 21.1 16.4V20.1C21.1 20.6 20.7 21 20.2 21C10.7 21 3 13.3 3 3.8C3 3.3 3.4 2.9 3.9 2.9H7.6C8.1 2.9 8.5 3.3 8.5 3.8C8.5 5.1 8.7 6.3 9.1 7.5C9.2 7.9 9.1 8.3 8.8 8.6L6.6 10.8Z"/></svg>
+
+                            </button>
+
+                            <button class="wa-acao" type="button" title="Vídeo">
+
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7C17 6.4 16.6 6 16 6H4C3.4 6 3 6.4 3 7V17C3 17.6 3.4 18 4 18H16C16.6 18 17 17.6 17 17V13.5L21 17.5V6.5L17 10.5Z"/></svg>
+
+                            </button>
+
+                            <button class="wa-acao" type="button" title="Menu">
+
+                                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="wa-conversa" id="chat">
+
+                        <div class="wa-data">HOJE</div>
+
+                        <div class="msg-ia">
+
+                            <div class="msg-bubble">
+
+                                Olá. Bem-vindo ao IFSC Mobilidade.<br><br>
+
+                                Como posso ajudar?<br><br>
+
+                                A) Ver o próximo ônibus<br>
+                                B) Consultar horários das linhas<br>
+                                C) Tempo estimado de viagem<br>
+                                D) Como funciona a integração<br>
+                                E) Onde faço o cartão estudante<br><br>
+
+                                Digite a letra da opção ou escreva sua pergunta.
+
+                                <span class="msg-hora">agora</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="wa-sugestoes" id="chips">
+
+                        <button class="chip" onclick="perguntaRapida('Qual o próximo ônibus para o Seminário?')">
+                            Próximo Seminário
+                        </button>
+
+                        <button class="chip" onclick="perguntaRapida('Qual o próximo ônibus para o Progresso?')">
+                            Próximo Progresso
+                        </button>
+
+                        <button class="chip" onclick="perguntaRapida('Quanto tempo leva até o Seminário?')">
+                            Tempo Seminário
+                        </button>
+
+                        <button class="chip" onclick="perguntaRapida('Como funciona a integração?')">
+                            Integração
+                        </button>
+
+                        <button class="chip" onclick="perguntaRapida('Onde faço o cartão estudante?')">
+                            Fazer cartão
+                        </button>
+
+                    </div>
+
+
+                    <div class="wa-input">
+
+                        <div class="wa-input-campo">
+
+                            <button class="wa-input-icone" type="button">
+
+                                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12C2 13.4 2.3 14.7 2.8 15.9L2 22L8.3 21.2C9.5 21.7 10.7 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2Z"/></svg>
+
+                            </button>
+
+                            <input
+                                type="text"
+                                id="perguntaIA"
+                                placeholder="Mensagem"
+                                onkeydown="if(event.key==='Enter') perguntarIA()"
+                            >
+
+                        </div>
+
+                        <button class="wa-enviar" onclick="perguntarIA()" type="button">
+
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.1 21.9L23 12L1.1 2.1L1 10L17 12L1 14L1.1 21.9Z"/></svg>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </section>
+
+
+
+        <section class="tela" id="tela-horarios">
+
+            <div class="page-inner">
+
+                <div class="horarios-topo">
+
+                    <h2>Horários das linhas</h2>
+
+                    <p>
+                        Selecione o campus e consulte os horários
+                        de saída do Terminal Urbano até o IFSC.
+                    </p>
+
+                </div>
+
+
+                <div class="horarios-selector">
+
+                    <button class="horario-tab ativo" data-destino="IFSC Seminário" onclick="selecionarDestino(this)">
+                        IFSC Seminário
+                        <span>Linha 08</span>
+                    </button>
+
+                    <button class="horario-tab" data-destino="IFSC Progresso" onclick="selecionarDestino(this)">
+                        IFSC Progresso
+                        <span>Linha 26</span>
+                    </button>
+
+                </div>
+
+
+                <input type="hidden" id="destino" value="IFSC Seminário">
+
+
+                <div class="horarios-info">
+
+                    <div class="horarios-info-item">
+
+                        <span class="horarios-info-label">Trajeto</span>
+                        <span class="horarios-info-valor">Terminal Urbano → IFSC</span>
+
+                    </div>
+
+                    <div class="horarios-info-item">
+
+                        <span class="horarios-info-label">Tempo estimado</span>
+                        <span class="horarios-info-valor" id="tempoEstimadoInfo">15-25 min</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="horarios-botao-wrap">
+
+                    <button class="horarios-botao" onclick="buscarHorarios()">
+                        Ver horários
+                    </button>
+
+                </div>
+
+
+                <div id="resultado" class="horarios-resultado">
+
+                    <p class="mensagem">
+                        Escolha o campus acima para consultar os horários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <section class="tela" id="tela-cartao">
+
+            <div class="page-inner">
+
+                <div class="secao-cartao-inner">
+
+                    <h2 class="secao-titulo">
+                        Cartão estudante
+                    </h2>
+
+                    <p class="secao-sub">
+                        Calculadora de saldo, documentos e informações
+                        sobre o cartão do transporte público de Chapecó.
+                    </p>
+
+
+                    <div class="cartao-blocos">
+
+                        <div class="cartao-bloco bloco-largo bloco-saldo">
+
+                            <div class="bloco-icon">01</div>
+
+                            <h3>Calculadora de saldo</h3>
+
+                            <p class="bloco-intro">
+                                Simule quantos dias seu saldo ainda cobre, já
+                                considerando as regras de integração de Chapecó.
+                            </p>
+
+
+                            <div class="aviso-integracao">
+
+                                <strong>Como funciona a integração</strong>
+                                <p>
+                                    A integração vale por até <b>1 hora</b>, em qualquer
+                                    ponto de embarque ou desembarque, desde que não seja
+                                    em linhas sobrepostas e não retorne ao ponto de origem.
+                                    Cartões estudante, passe urbano e vale transporte têm
+                                    direito a <b>1 integração a cada 2 passagens pagas</b>.
+                                </p>
+
+                            </div>
+
+
+                            <div class="calc-grid">
+
+                                <div class="calc-campo">
+
+                                    <label for="saldo">Saldo atual (R$)</label>
+
+                                    <input
+                                        type="number"
+                                        id="saldo"
+                                        placeholder="Ex: 50"
+                                        min="0"
+                                        step="0.01"
+                                    >
+
+                                </div>
+
+
+                                <div class="calc-campo">
+
+                                    <label for="valorPassagem">Valor da passagem (R$)</label>
+
+                                    <input
+                                        type="number"
+                                        id="valorPassagem"
+                                        value="2.45"
+                                        min="0"
+                                        step="0.01"
+                                    >
+
+                                </div>
+
+
+                                <div class="calc-campo">
+
+                                    <label for="viagensPorDia">Viagens por dia</label>
+
+                                    <input
+                                        type="number"
+                                        id="viagensPorDia"
+                                        placeholder="Ex: 2"
+                                        min="1"
+                                        step="1"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <button class="calc-botao" onclick="calcularSaldo()">
+                                Calcular saldo
+                            </button>
+
+
+                            <div id="resultadoSaldo">
+
+                                <p class="mensagem">
+                                    Preencha os campos acima para calcular.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cartao-bloco bloco-largo">
+
+                            <div class="bloco-icon">02</div>
+
+                            <h3>Tarifa e atendimento</h3>
+
+                            <div class="cartao-highlights">
+
+                                <div class="highlight-card destaque">
+
+                                    <span class="highlight-tag">Tarifa atual</span>
+
+                                    <div class="highlight-tarifa">R$ 2,45</div>
+
+                                    <p class="highlight-desc">
+                                        Valor da passagem para cartão estudante.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="highlight-card">
+
+                                    <span class="highlight-tag">Atendimento presencial</span>
+
+                                    <h3>Auto Viação Chapecó</h3>
+
+                                    <p class="highlight-desc">
+                                        Rua Clevelândia, 75d — dentro do terminal urbano.
+                                    </p>
+
+                                    <p class="highlight-desc">
+                                        <strong>Segunda a sexta</strong> —
+                                        das 07:00 às 19:00.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cartao-bloco">
+
+                            <div class="bloco-icon">03</div>
+
+                            <h3>Primeiro cartão</h3>
+
+                            <p class="bloco-intro">
+                                Documentos para tirar o cartão pela primeira vez:
+                            </p>
+
+                            <ul class="bloco-lista">
+
+                                <li>RG e CPF</li>
+
+                                <li>
+                                    Comprovante de residência
+                                    <span class="bloco-nota">
+                                        Em nome do estudante ou dos pais. Se estiver
+                                        em nome de terceiros, trazer declaração
+                                        de residência.
+                                    </span>
+                                </li>
+
+                                <li>
+                                    Atestado de frequência
+                                    <span class="bloco-nota">
+                                        Carimbado e assinado pela instituição
+                                        (atual e original).
+                                    </span>
+                                </li>
+
+                            </ul>
+
+                            <div class="bloco-excecao">
+                                <strong>Instituições integradas</strong>
+                                Alunos da UNOCHAPECÓ, UNOESC, SENAI, UFFS, IFSC,
+                                UCEFF e UDESC só precisam levar
+                                <strong>RG e CPF</strong>.
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cartao-bloco">
+
+                            <div class="bloco-icon">04</div>
+
+                            <h3>Desbloqueio</h3>
+
+                            <p class="bloco-intro">
+                                Para desbloquear o cartão no começo do ano letivo:
+                            </p>
+
+                            <ul class="bloco-lista">
+
+                                <li>RG e CPF</li>
+
+                                <li>Cartão passe</li>
+
+                                <li>
+                                    Atestado de frequência
+                                    <span class="bloco-nota">
+                                        Carimbado e assinado pela instituição
+                                        (atual e original).
+                                    </span>
+                                </li>
+
+                            </ul>
+
+                            <div class="bloco-excecao">
+                                <strong>Instituições integradas</strong>
+                                Alunos da UNOCHAPECÓ, UNOESC, SENAI, UFFS, IFSC,
+                                UCEFF e UDESC só precisam levar
+                                <strong>cartão passe, RG e CPF</strong>.
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="cartao-bloco bloco-largo">
+
+                            <div class="bloco-icon">05</div>
+
+                            <h3>Recarga on-line</h3>
+
+                            <p class="bloco-intro">
+                                Alunos das instituições integradas também podem
+                                recarregar o cartão pela internet. Instituições:
+                                UNOCHAPECÓ, UNOESC, SENAI, UFFS, IFSC, UCEFF e UDESC.
+                            </p>
+
+                            <ul class="bloco-lista">
+
+                                <li>
+                                    Entre no ícone <strong>“Recarga On-line”</strong>
+                                    e escolha a opção de cartão estudante.
+                                </li>
+
+                                <li>
+                                    No primeiro login, cadastre usuário e senha.
+                                </li>
+
+                                <li>
+                                    A recarga gera boleto bancário para pagamento.
+                                </li>
+
+                                <li>
+                                    O crédito entra no cartão em até
+                                    <strong>2 dias úteis</strong> após o pagamento,
+                                    pela recarga embarcada nos ônibus.
+                                </li>
+
+                            </ul>
+
+                            <div class="bloco-alerta">
+                                <strong>Atenção:</strong> antes do primeiro acesso,
+                                o estudante precisa ter o cartão desbloqueado no
+                                atendimento presencial da Auto Viação.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <footer>
+
+        <p>
+            IFSC Mobilidade — Projeto acadêmico
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
