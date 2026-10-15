@@ -3,6 +3,10 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const fs = require("fs");
+const path = require("path");
+
+const { responderLocal } = require("./iaLocal");
 
 const app = express();
 
@@ -141,7 +145,6 @@ function paraHorario(total) {
 }
 
 
-// Rota que calcula o ônibus ideal para ida ou volta do IFSC
 app.post("/api/agenda", (req, res) => {
 
     const { modo, campus, horarioUsuario } = req.body;
@@ -258,6 +261,91 @@ app.post("/api/agenda", (req, res) => {
 });
 
 
+// ========================================
+// JUNÇÃO DE HORÁRIOS
+// ========================================
+
+app.get("/api/lotacao/linhas", (req, res) => {
+
+    try {
+
+        const caminho = path.join(__dirname, "lotacao.json");
+        const conteudo = fs.readFileSync(caminho, "utf-8");
+        const base = JSON.parse(conteudo);
+
+        const linhas = base.linhas.map(l => ({
+            id: l.id,
+            numero: l.numero,
+            nome: l.nome,
+            categoria: l.categoria,
+            passaIFSC: l.passaIFSC
+        }));
+
+        res.json({
+            filtroHorario: base.filtroHorario,
+            linhas: linhas
+        });
+
+    } catch (erro) {
+        console.error("Erro ao ler lotacao.json:", erro);
+        res.status(500).json({ erro: "Erro ao carregar linhas" });
+    }
+
+});
+
+
+app.post("/api/lotacao/juntar", (req, res) => {
+
+    const { linhasSelecionadas, dia } = req.body;
+
+    if (!linhasSelecionadas || !Array.isArray(linhasSelecionadas) || linhasSelecionadas.length === 0) {
+        return res.status(400).json({ erro: "Selecione pelo menos uma linha." });
+    }
+
+    const diaValido = ["segSex", "sabado", "domingo"].includes(dia) ? dia : "segSex";
+
+    try {
+
+        const caminho = path.join(__dirname, "lotacao.json");
+        const conteudo = fs.readFileSync(caminho, "utf-8");
+        const base = JSON.parse(conteudo);
+
+        const todosHorarios = [];
+
+        base.linhas.forEach(linha => {
+
+            if (!linhasSelecionadas.includes(linha.id)) return;
+
+            const horariosDia = linha.horarios[diaValido] || [];
+
+            horariosDia.forEach(h => {
+                todosHorarios.push({
+                    horario: h,
+                    linha: `Linha ${linha.numero}`,
+                    nome: linha.nome,
+                    destino: linha.nome,
+                    passaIFSC: linha.passaIFSC
+                });
+            });
+
+        });
+
+        todosHorarios.sort((a, b) => a.horario.localeCompare(b.horario));
+
+        res.json({
+            total: todosHorarios.length,
+            dia: diaValido,
+            horarios: todosHorarios
+        });
+
+    } catch (erro) {
+        console.error("Erro ao juntar horários:", erro);
+        res.status(500).json({ erro: "Erro ao juntar horários" });
+    }
+
+});
+
+
 function horaAgora() {
     const agora = new Date();
     const hh = String(agora.getHours()).padStart(2, "0");
@@ -348,9 +436,7 @@ ${horariosProgresso.join(", ")}
 - Em 4 viagens, paga 2 passagens (R$ ${(TARIFA * 2).toFixed(2)})
 - Fórmula: passagens pagas = arredondar pra cima (viagens ÷ 2)
 
-## COMO CALCULAR SALDO — REGRAS GERAIS
-
-### Fórmulas básicas
+## COMO CALCULAR SALDO
 
 **Passagens pagas por dia:**
 - passagensPagasDia = arredondar_pra_cima(viagensPorDia ÷ 2)
@@ -358,73 +444,26 @@ ${horariosProgresso.join(", ")}
 **Custo por dia:**
 - custoDiario = passagensPagasDia × ${TARIFA.toFixed(2)}
 
-**Saldo restante após X dias:**
-- saldoRestante = saldo − (X × custoDiario)
-
 **Dias que o saldo ainda dura:**
 - diasRestantes = arredondar_pra_baixo(saldoAtual ÷ custoDiario)
 
-### Regras de comportamento
+### Regras
 
 1. SEMPRE use R$ ${TARIFA.toFixed(2)} como valor da passagem
-2. Se o usuário não informar viagens por dia, ASSUMA 2 (ida e volta)
+2. Se o usuário não informar viagens por dia, ASSUMA 2
 3. Se o usuário não informar o saldo, PERGUNTE antes de calcular
 4. Nunca diga "não tenho essa informação" para perguntas de cálculo
 5. Responda em no máximo 4 frases
-6. Sempre mostre o cálculo de forma resumida na resposta
-7. Se sobrar saldo, mencione quanto sobra
 
-## CÁLCULO SIMPLES (sem histórico)
+## CÁLCULO COM HISTÓRICO
 
-**Exemplo:** "Tenho 100 reais, faço 2 viagens por dia, quanto tempo dura?"
-- Passagens pagas por dia: ceil(2÷2) = 1
-- Custo diário: 1 × 2,45 = R$ 2,45
-- Dias: floor(100 ÷ 2,45) = 40 dias
-- Resposta: "Com R$ 100 e 2 viagens por dia, seu saldo dura cerca de 40 dias."
+Quando o usuário informar uma data de recarga (ex: "recarreguei 100 dia 2"):
 
-## CÁLCULO COM HISTÓRICO (recarga em data passada)
-
-**PASSO 1 — Descobrir quantos dias se passaram**
-- diasPassados = diaDoMesAtual − diaDaRecarga
-
-**PASSO 2 — Calcular quantos dias o aluno realmente foi**
-- Comece com diasPassados
-- Se o usuário disser que faltou X dias, subtraia: diasUsados = diasPassados − faltas
-- Se não houver info de faltas, use diasPassados
-
-**PASSO 3 — Calcular o saldo já gasto**
-- saldoGasto = diasUsados × passagensPagasDia × ${TARIFA.toFixed(2)}
-
-**PASSO 4 — Calcular o saldo restante**
-- saldoRestante = saldoInicial − saldoGasto
-
-**PASSO 5 — Calcular quantos dias ainda dura**
-- diasRestantes = floor(saldoRestante ÷ (passagensPagasDia × ${TARIFA.toFixed(2)}))
-
-**PASSO 6 — Comparar com o fim do mês**
-- Use "Dias que faltam até o fim do mês" do topo do contexto
-
-### Exemplos completos
-
-**Exemplo 1:** "Recarreguei 100 reais dia 2, faço 2 viagens por dia, quanto tenho agora?"
-- Hoje é dia 8, então: 8 − 2 = 6 dias
-- Passagens pagas por dia: 1
-- Saldo gasto: 6 × 1 × 2,45 = R$ 14,70
-- Saldo atual: R$ 85,30
-- Dias restantes: floor(85,30 ÷ 2,45) = 34 dias
-
-**Exemplo 2:** "Recarreguei 50 reais dia 5, faço 2 viagens por dia, dá até o fim do mês?"
-- Hoje é dia 8, então: 8 − 5 = 3 dias
-- Saldo gasto: 3 × 1 × 2,45 = R$ 7,35
-- Saldo atual: R$ 42,65
-- Dias restantes: 17 dias
-- Faltam 22 dias pro fim do mês → NÃO dá
-
-**Exemplo 3:** "Recarreguei 20 reais dia 1, faço 2 viagens por dia, ainda tenho?"
-- Hoje é dia 8: 8 − 1 = 7 dias
-- Saldo gasto: 7 × 1 × 2,45 = R$ 17,15
-- Saldo atual: R$ 2,85
-- Dura mais 1 dia
+1. diasPassados = diaDoMesAtual − diaDaRecarga
+2. Se houver faltas: diasUsados = diasPassados − faltas
+3. saldoGasto = diasUsados × passagensPagasDia × ${TARIFA.toFixed(2)}
+4. saldoRestante = saldoInicial − saldoGasto
+5. diasRestantes = floor(saldoRestante ÷ (passagensPagasDia × ${TARIFA.toFixed(2)}))
 
 ## OUTRAS INFORMAÇÕES
 
@@ -444,7 +483,7 @@ ${horariosProgresso.join(", ")}
 - Gera boleto bancário
 - Crédito em até 2 dias úteis
 
-## REGRAS FINAIS DE COMPORTAMENTO
+## REGRAS FINAIS
 
 - Responda SEMPRE em português do Brasil
 - Seja direto e objetivo
@@ -475,12 +514,34 @@ async function tentarModelo(nomeModelo, mensagem) {
 
 app.post("/api/ia", async (req, res) => {
 
-    const { mensagem } = req.body;
+    const { mensagem, usuarioId } = req.body;
 
     if (!mensagem || typeof mensagem !== "string") {
         return res.status(400).json({
             erro: "Envie uma mensagem de texto."
         });
+    }
+
+    const id = usuarioId || "padrao";
+
+    try {
+
+        const respostaLocal = responderLocal(mensagem, id);
+
+        if (respostaLocal) {
+
+            console.log("Respondido pela IA local");
+
+            return res.json({
+                pergunta: mensagem,
+                resposta: respostaLocal,
+                fonte: "local"
+            });
+
+        }
+
+    } catch (erro) {
+        console.log("IA local falhou, tentando online:", erro.message);
     }
 
     let resultado = null;
@@ -491,7 +552,7 @@ app.post("/api/ia", async (req, res) => {
 
         try {
 
-            console.log(`Tentando modelo: ${nomeModelo}`);
+            console.log(`Tentando modelo online: ${nomeModelo}`);
 
             resultado = await tentarModelo(nomeModelo, mensagem);
             modeloUsado = nomeModelo;
@@ -512,14 +573,9 @@ app.post("/api/ia", async (req, res) => {
 
     if (!resultado) {
 
-        console.log("========== TODOS OS MODELOS FALHARAM ==========");
-        console.log("Último erro:", ultimoErro ? ultimoErro.message : "desconhecido");
-        console.log("================================================");
-
         return res.status(500).json({
             erro: "Não foi possível gerar a resposta no momento.",
-            detalhe: ultimoErro ? ultimoErro.message : "Todos os modelos falharam",
-            modelosTentados: MODELOS_DISPONIVEIS
+            detalhe: ultimoErro ? ultimoErro.message : "Todos os modelos falharam"
         });
 
     }
@@ -529,7 +585,8 @@ app.post("/api/ia", async (req, res) => {
     res.json({
         pergunta: mensagem,
         resposta: resposta,
-        modelo: modeloUsado
+        modelo: modeloUsado,
+        fonte: "online"
     });
 
 });
