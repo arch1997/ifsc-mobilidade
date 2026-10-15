@@ -2458,3 +2458,297 @@ footer {
 
     .agenda-status-valor { font-size: 18px; }
 }
+.aviso-offline {
+    background: rgba(255, 217, 61, 0.1);
+    border: 1px solid rgba(255, 217, 61, 0.35);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #ffd93d;
+    text-align: center;
+}
+
+.indicador-online {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 179, 95, 0.15);
+    border: 1px solid rgba(0, 179, 95, 0.4);
+    color: var(--verde);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    z-index: 999;
+    transition: all 0.3s;
+}
+
+.indicador-online.offline {
+    background: rgba(255, 82, 82, 0.15);
+    border-color: rgba(255, 82, 82, 0.4);
+    color: #ff5252;
+}
+/* =========================
+   TELA JUNÇÃO DE HORÁRIOS
+========================= */
+
+.juncao-topo {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.juncao-topo h2 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--texto);
+    margin-bottom: 10px;
+}
+
+.juncao-topo p {
+    font-size: 15px;
+    color: var(--texto-2);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.juncao-form {
+    background: var(--bg-card);
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    padding: 28px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.juncao-bloco {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.juncao-bloco label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--verde);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+}
+
+.juncao-dias {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.juncao-dia {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--borda);
+    color: var(--texto-2);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.juncao-dia:hover {
+    border-color: rgba(0, 179, 95, 0.4);
+    color: var(--texto);
+}
+
+.juncao-dia.ativo {
+    background: linear-gradient(135deg,
+        rgba(0, 179, 95, 0.18),
+        rgba(0, 179, 95, 0.06));
+    border-color: var(--verde);
+    color: #ffffff;
+}
+
+.juncao-linhas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.juncao-linha {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.juncao-linha:hover {
+    border-color: rgba(0, 179, 95, 0.4);
+}
+
+.juncao-linha input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--verde);
+    cursor: pointer;
+}
+
+.juncao-linha-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.juncao-linha-info strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--texto);
+}
+
+.juncao-linha-info span {
+    font-size: 12px;
+    color: var(--texto-2);
+}
+
+.juncao-ifsc {
+    background: rgba(0, 179, 95, 0.15);
+    border: 1px solid rgba(0, 179, 95, 0.35);
+    color: var(--verde);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+.juncao-botao {
+    padding: 15px 22px;
+    border-radius: 12px;
+    background: var(--verde);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+}
+
+.juncao-botao:hover {
+    background: var(--verde-escuro);
+}
+
+.juncao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin: 22px 0 14px;
+    padding: 0 4px;
+    flex-wrap: wrap;
+}
+
+.juncao-total {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--verde);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.juncao-busca {
+    flex: 1;
+    max-width: 240px;
+    margin: 0;
+    padding: 10px 14px;
+    font-size: 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--texto);
+}
+
+.juncao-busca:focus {
+    outline: none;
+    border-color: var(--verde);
+}
+
+.juncao-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.juncao-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    transition: all 0.15s;
+}
+
+.juncao-item:hover {
+    background: rgba(0, 179, 95, 0.06);
+    border-color: rgba(0, 179, 95, 0.3);
+}
+
+.juncao-horario {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--verde);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+    min-width: 60px;
+}
+
+.juncao-linha-nome {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto);
+    min-width: 90px;
+}
+
+.juncao-destino {
+    font-size: 14px;
+    color: var(--texto-2);
+    flex: 1;
+}
+
+@media (max-width: 900px) {
+
+    .juncao-topo h2 {
+        font-size: 26px;
+    }
+
+    .juncao-linhas {
+        grid-template-columns: 1fr;
+    }
+
+    .juncao-dias {
+        grid-template-columns: 1fr;
+    }
+
+    .juncao-item {
+        flex-wrap: wrap;
+    }
+
+    .juncao-horario {
+        min-width: auto;
+    }
+
+    .juncao-linha-nome {
+        min-width: auto;
+    }
+}

@@ -40,6 +40,8 @@
 
                 <li><a href="#" class="nav-link" onclick="trocarTela('agenda'); return false;">Agenda</a></li>
 
+                <li><a href="#" class="nav-link" onclick="trocarTela('juncao'); return false;">Junção</a></li>
+
                 <li><a href="#" class="nav-link" onclick="trocarTela('cartao'); return false;">Cartão</a></li>
 
             </ul>
@@ -223,50 +225,31 @@
                     <div class="wa-topbar">
 
                         <button class="wa-back" type="button">
-
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20v-2z"/></svg>
-
                         </button>
 
                         <div class="wa-avatar-top">
-
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-
                                 <path d="M4 16V6C4 4.9 4.9 4 6 4H18C19.1 4 20 4.9 20 6V16C20 17.1 19.1 18 18 18H17V19C17 19.6 16.6 20 16 20C15.4 20 15 19.6 15 19V18H9V19C9 19.6 8.6 20 8 20C7.4 20 7 19.6 7 19V18H6C4.9 18 4 17.1 4 16Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-
                                 <path d="M4 12H20" stroke="currentColor" stroke-width="1.8"/>
-
                             </svg>
-
                         </div>
 
                         <div class="wa-info">
-
                             <div class="wa-nome">Assistente IFSC</div>
                             <div class="wa-status">online</div>
-
                         </div>
 
                         <div class="wa-acoes">
-
                             <button class="wa-acao" type="button" title="Chamada">
-
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8C7.9 13.4 10.6 16.1 13.2 17.4L15.4 15.2C15.7 14.9 16.1 14.8 16.5 14.9C17.7 15.3 18.9 15.5 20.2 15.5C20.7 15.5 21.1 15.9 21.1 16.4V20.1C21.1 20.6 20.7 21 20.2 21C10.7 21 3 13.3 3 3.8C3 3.3 3.4 2.9 3.9 2.9H7.6C8.1 2.9 8.5 3.3 8.5 3.8C8.5 5.1 8.7 6.3 9.1 7.5C9.2 7.9 9.1 8.3 8.8 8.6L6.6 10.8Z"/></svg>
-
                             </button>
-
                             <button class="wa-acao" type="button" title="Vídeo">
-
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7C17 6.4 16.6 6 16 6H4C3.4 6 3 6.4 3 7V17C3 17.6 3.4 18 4 18H16C16.6 18 17 17.6 17 17V13.5L21 17.5V6.5L17 10.5Z"/></svg>
-
                             </button>
-
                             <button class="wa-acao" type="button" title="Menu">
-
                                 <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-
                             </button>
-
                         </div>
 
                     </div>
@@ -277,25 +260,17 @@
                         <div class="wa-data">HOJE</div>
 
                         <div class="msg-ia">
-
                             <div class="msg-bubble">
-
                                 Olá. Bem-vindo ao IFSC Mobilidade.<br><br>
-
                                 Como posso ajudar?<br><br>
-
                                 A) Ver o próximo ônibus<br>
                                 B) Consultar horários das linhas<br>
                                 C) Tempo estimado de viagem<br>
                                 D) Como funciona a integração<br>
                                 E) Onde faço o cartão estudante<br><br>
-
                                 Digite a letra da opção ou escreva sua pergunta.
-
                                 <span class="msg-hora">agora</span>
-
                             </div>
-
                         </div>
 
                     </div>
@@ -306,19 +281,15 @@
                         <button class="chip" onclick="perguntaRapida('Qual o próximo ônibus para o Seminário?')">
                             Próximo Seminário
                         </button>
-
                         <button class="chip" onclick="perguntaRapida('Qual o próximo ônibus para o Progresso?')">
                             Próximo Progresso
                         </button>
-
                         <button class="chip" onclick="perguntaRapida('Quanto tempo leva até o Seminário?')">
                             Tempo Seminário
                         </button>
-
                         <button class="chip" onclick="perguntaRapida('Como funciona a integração?')">
                             Integração
                         </button>
-
                         <button class="chip" onclick="perguntaRapida('Onde faço o cartão estudante?')">
                             Fazer cartão
                         </button>
@@ -331,9 +302,7 @@
                         <div class="wa-input-campo">
 
                             <button class="wa-input-icone" type="button">
-
                                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12C2 13.4 2.3 14.7 2.8 15.9L2 22L8.3 21.2C9.5 21.7 10.7 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2Z"/></svg>
-
                             </button>
 
                             <input
@@ -346,9 +315,7 @@
                         </div>
 
                         <button class="wa-enviar" onclick="perguntarIA()" type="button">
-
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.1 21.9L23 12L1.1 2.1L1 10L17 12L1 14L1.1 21.9Z"/></svg>
-
                         </button>
 
                     </div>
@@ -366,14 +333,11 @@
             <div class="page-inner">
 
                 <div class="horarios-topo">
-
                     <h2>Horários das linhas</h2>
-
                     <p>
                         Selecione o campus e consulte os horários
                         de saída do Terminal Urbano até o IFSC.
                     </p>
-
                 </div>
 
 
@@ -398,37 +362,29 @@
                 <div class="horarios-info">
 
                     <div class="horarios-info-item">
-
                         <span class="horarios-info-label">Trajeto</span>
                         <span class="horarios-info-valor">Terminal Urbano → IFSC</span>
-
                     </div>
 
                     <div class="horarios-info-item">
-
                         <span class="horarios-info-label">Tempo estimado</span>
                         <span class="horarios-info-valor" id="tempoEstimadoInfo">15-25 min</span>
-
                     </div>
 
                 </div>
 
 
                 <div class="horarios-botao-wrap">
-
                     <button class="horarios-botao" onclick="buscarHorarios()">
                         Ver horários
                     </button>
-
                 </div>
 
 
                 <div id="resultado" class="horarios-resultado">
-
                     <p class="mensagem">
                         Escolha o campus acima para consultar os horários.
                     </p>
-
                 </div>
 
             </div>
@@ -442,64 +398,41 @@
             <div class="page-inner">
 
                 <div class="agenda-topo">
-
                     <h2>Agenda do dia</h2>
-
                     <p>
                         Informe o horário que você quer chegar no IFSC
                         ou o horário que você sai da aula, e o sistema
                         calcula qual ônibus você deve pegar.
                     </p>
-
                 </div>
 
 
                 <div class="agenda-form">
 
                     <div class="agenda-campo">
-
                         <label for="agenda-campus">Campus</label>
-
                         <select id="agenda-campus">
-
-                            <option value="IFSC Seminário">
-                                IFSC Seminário — Linha 08
-                            </option>
-
-                            <option value="IFSC Progresso">
-                                IFSC Progresso — Linha 26
-                            </option>
-
+                            <option value="IFSC Seminário">IFSC Seminário — Linha 08</option>
+                            <option value="IFSC Progresso">IFSC Progresso — Linha 26</option>
                         </select>
-
                     </div>
 
 
                     <div class="agenda-modos">
-
                         <button class="agenda-modo ativo" data-modo="ida" onclick="selecionarModo(this)">
                             Quero chegar no IFSC
                         </button>
-
                         <button class="agenda-modo" data-modo="volta" onclick="selecionarModo(this)">
                             Estou saindo do IFSC
                         </button>
-
                     </div>
 
 
                     <div class="agenda-campo">
-
                         <label for="agenda-horario" id="agenda-horario-label">
                             Horário que quero chegar
                         </label>
-
-                        <input
-                            type="time"
-                            id="agenda-horario"
-                            value="13:30"
-                        >
-
+                        <input type="time" id="agenda-horario" value="13:30">
                     </div>
 
 
@@ -511,11 +444,77 @@
 
 
                 <div id="agenda-resultado">
-
                     <p class="mensagem">
                         Escolha o campus, o modo e informe o horário.
                     </p>
+                </div>
 
+            </div>
+
+        </section>
+
+
+
+        <section class="tela" id="tela-juncao">
+
+            <div class="page-inner">
+
+                <div class="juncao-topo">
+                    <h2>Junção de Horários</h2>
+                    <p>
+                        Selecione as linhas que quer comparar e o dia da semana.
+                        Vou juntar todos os horários numa grade única.
+                    </p>
+                </div>
+
+
+                <div class="juncao-form">
+
+                    <div class="juncao-bloco">
+
+                        <label>Dia da semana</label>
+
+                        <div class="juncao-dias">
+
+                            <button class="juncao-dia ativo" data-dia="segSex" onclick="selecionarDia(this)">
+                                Segunda a sexta
+                            </button>
+
+                            <button class="juncao-dia" data-dia="sabado" onclick="selecionarDia(this)">
+                                Sábado
+                            </button>
+
+                            <button class="juncao-dia" data-dia="domingo" onclick="selecionarDia(this)">
+                                Domingo
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="juncao-bloco">
+
+                        <label>Linhas</label>
+
+                        <div class="juncao-linhas" id="juncao-linhas">
+                            <p class="mensagem">Carregando linhas...</p>
+                        </div>
+
+                    </div>
+
+
+                    <button class="juncao-botao" onclick="juntarHorarios()">
+                        Juntar horários
+                    </button>
+
+                </div>
+
+
+                <div id="juncao-resultado">
+                    <p class="mensagem">
+                        Escolha o dia, marque as linhas e clique em Juntar.
+                    </p>
                 </div>
 
             </div>
@@ -553,9 +552,7 @@
                                 considerando as regras de integração de Chapecó.
                             </p>
 
-
                             <div class="aviso-integracao">
-
                                 <strong>Como funciona a integração</strong>
                                 <p>
                                     A integração vale por até <b>1 hora</b>, em qualquer
@@ -564,70 +561,35 @@
                                     Cartões estudante, passe urbano e vale transporte têm
                                     direito a <b>1 integração a cada 2 passagens pagas</b>.
                                 </p>
-
                             </div>
-
 
                             <div class="calc-grid">
 
                                 <div class="calc-campo">
-
                                     <label for="saldo">Saldo atual (R$)</label>
-
-                                    <input
-                                        type="number"
-                                        id="saldo"
-                                        placeholder="Ex: 50"
-                                        min="0"
-                                        step="0.01"
-                                    >
-
+                                    <input type="number" id="saldo" placeholder="Ex: 50" min="0" step="0.01">
                                 </div>
 
-
                                 <div class="calc-campo">
-
                                     <label for="valorPassagem">Valor da passagem (R$)</label>
-
-                                    <input
-                                        type="number"
-                                        id="valorPassagem"
-                                        value="2.45"
-                                        min="0"
-                                        step="0.01"
-                                    >
-
+                                    <input type="number" id="valorPassagem" value="2.45" min="0" step="0.01">
                                 </div>
 
-
                                 <div class="calc-campo">
-
                                     <label for="viagensPorDia">Viagens por dia</label>
-
-                                    <input
-                                        type="number"
-                                        id="viagensPorDia"
-                                        placeholder="Ex: 2"
-                                        min="1"
-                                        step="1"
-                                    >
-
+                                    <input type="number" id="viagensPorDia" placeholder="Ex: 2" min="1" step="1">
                                 </div>
 
                             </div>
-
 
                             <button class="calc-botao" onclick="calcularSaldo()">
                                 Calcular saldo
                             </button>
 
-
                             <div id="resultadoSaldo">
-
                                 <p class="mensagem">
                                     Preencha os campos acima para calcular.
                                 </p>
-
                             </div>
 
                         </div>
@@ -643,33 +605,23 @@
                             <div class="cartao-highlights">
 
                                 <div class="highlight-card destaque">
-
                                     <span class="highlight-tag">Tarifa atual</span>
-
                                     <div class="highlight-tarifa">R$ 2,45</div>
-
                                     <p class="highlight-desc">
                                         Valor da passagem para cartão estudante.
                                     </p>
-
                                 </div>
 
-
                                 <div class="highlight-card">
-
                                     <span class="highlight-tag">Atendimento presencial</span>
-
                                     <h3>Auto Viação Chapecó</h3>
-
                                     <p class="highlight-desc">
                                         Rua Clevelândia, 75d — dentro do terminal urbano.
                                     </p>
-
                                     <p class="highlight-desc">
                                         <strong>Segunda a sexta</strong> —
                                         das 07:00 às 19:00.
                                     </p>
-
                                 </div>
 
                             </div>
@@ -689,9 +641,7 @@
                             </p>
 
                             <ul class="bloco-lista">
-
                                 <li>RG e CPF</li>
-
                                 <li>
                                     Comprovante de residência
                                     <span class="bloco-nota">
@@ -700,7 +650,6 @@
                                         de residência.
                                     </span>
                                 </li>
-
                                 <li>
                                     Atestado de frequência
                                     <span class="bloco-nota">
@@ -708,7 +657,6 @@
                                         (atual e original).
                                     </span>
                                 </li>
-
                             </ul>
 
                             <div class="bloco-excecao">
@@ -733,11 +681,8 @@
                             </p>
 
                             <ul class="bloco-lista">
-
                                 <li>RG e CPF</li>
-
                                 <li>Cartão passe</li>
-
                                 <li>
                                     Atestado de frequência
                                     <span class="bloco-nota">
@@ -745,7 +690,6 @@
                                         (atual e original).
                                     </span>
                                 </li>
-
                             </ul>
 
                             <div class="bloco-excecao">
@@ -772,26 +716,21 @@
                             </p>
 
                             <ul class="bloco-lista">
-
                                 <li>
-                                    Entre no ícone <strong>“Recarga On-line”</strong>
+                                    Entre no ícone <strong>"Recarga On-line"</strong>
                                     e escolha a opção de cartão estudante.
                                 </li>
-
                                 <li>
                                     No primeiro login, cadastre usuário e senha.
                                 </li>
-
                                 <li>
                                     A recarga gera boleto bancário para pagamento.
                                 </li>
-
                                 <li>
                                     O crédito entra no cartão em até
                                     <strong>2 dias úteis</strong> após o pagamento,
                                     pela recarga embarcada nos ônibus.
                                 </li>
-
                             </ul>
 
                             <div class="bloco-alerta">
@@ -816,14 +755,13 @@
 
 
     <footer>
-
         <p>
             IFSC Mobilidade — Projeto acadêmico
         </p>
-
     </footer>
 
 
+    <script src="dadosOffline.js"></script>
     <script src="script.js"></script>
 
 </body>

@@ -1,3 +1,70 @@
+// ============================================================
+// CACHE OFFLINE
+// ============================================================
+
+const CACHE_KEY = "ifsc_mobilidade_cache";
+const CACHE_TTL = 1000 * 60 * 60 * 24;
+
+function salvarCache(chave, dados) {
+    try {
+        localStorage.setItem(CACHE_KEY + "_" + chave, JSON.stringify({
+            dados: dados,
+            timestamp: Date.now()
+        }));
+    } catch (e) {
+        console.log("Cache indisponível");
+    }
+}
+
+function lerCache(chave) {
+    try {
+        const item = localStorage.getItem(CACHE_KEY + "_" + chave);
+        if (!item) return null;
+        const obj = JSON.parse(item);
+        if (Date.now() - obj.timestamp > CACHE_TTL) {
+            localStorage.removeItem(CACHE_KEY + "_" + chave);
+            return null;
+        }
+        return obj.dados;
+    } catch (e) {
+        return null;
+    }
+}
+
+function estaOnline() {
+    return navigator.onLine;
+}
+
+async function fetchComFallback(url, chaveCache, dadosOffline) {
+
+    if (estaOnline()) {
+        try {
+            const resposta = await fetch(url);
+            if (resposta.ok) {
+                const dados = await resposta.json();
+                salvarCache(chaveCache, dados);
+                return dados;
+            }
+        } catch (e) {
+            console.log("Falha na API, usando cache/dados offline");
+        }
+    }
+
+    const cache = lerCache(chaveCache);
+    if (cache) {
+        console.log("Usando dados do cache");
+        return cache;
+    }
+
+    console.log("Usando dados offline embutidos");
+    return dadosOffline;
+}
+
+
+// ============================================================
+// NAVEGAÇÃO ENTRE TELAS
+// ============================================================
+
 function trocarTela(nome) {
 
     document.querySelectorAll(".tela").forEach(t => {
@@ -21,9 +88,44 @@ function trocarTela(nome) {
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 
+    if (nome === "juncao") {
+        carregarLinhasJuncao();
+    }
+
 }
 
 
+// ============================================================
+// INDICADOR DE CONEXÃO
+// ============================================================
+
+function atualizarIndicador() {
+
+    let indicador = document.getElementById("indicador-conexao");
+
+    if (!indicador) {
+        indicador = document.createElement("div");
+        indicador.id = "indicador-conexao";
+        document.body.appendChild(indicador);
+    }
+
+    if (estaOnline()) {
+        indicador.className = "indicador-online";
+        indicador.textContent = "Online";
+    } else {
+        indicador.className = "indicador-online offline";
+        indicador.textContent = "Offline — dados salvos";
+    }
+
+}
+
+window.addEventListener("online", atualizarIndicador);
+window.addEventListener("offline", atualizarIndicador);
+
+
+// ============================================================
+// AGENDA — SELEÇÃO DE MODO
+// ============================================================
 
 function selecionarModo(el) {
 
@@ -49,6 +151,9 @@ function selecionarModo(el) {
 }
 
 
+// ============================================================
+// HORÁRIOS — SELEÇÃO DE CAMPUS
+// ============================================================
 
 function selecionarDestino(el) {
 
@@ -77,20 +182,24 @@ function selecionarDestino(el) {
 }
 
 
+// ============================================================
+// BUSCAR HORÁRIOS
+// ============================================================
 
 async function buscarHorarios() {
 
     const destino = document.getElementById("destino").value;
-
     const resultado = document.getElementById("resultado");
 
     resultado.innerHTML = "<p class='mensagem'>Buscando horários...</p>";
 
     try {
 
-        const resposta = await fetch("http://localhost:3000/api/horarios");
-
-        const horarios = await resposta.json();
+        const horarios = await fetchComFallback(
+            "http://localhost:3000/api/horarios",
+            "horarios",
+            DADOS_OFFLINE.horarios
+        );
 
         const filtrados = horarios
             .filter(h => h.destino === destino)
@@ -109,33 +218,34 @@ async function buscarHorarios() {
         let html = `<div class="horarios-grid">`;
 
         filtrados.forEach(h => {
-
             const passou = h.horario < agoraStr;
-
             html += `
                 <div class="horario-card ${passou ? 'passou' : ''}">
                     <span class="horario-hora">${h.horario}</span>
                     <span class="horario-linha">${h.linha}</span>
                 </div>
             `;
-
         });
 
         html += `</div>`;
 
+        if (!estaOnline()) {
+            html += `<p class="aviso-offline">Modo offline — mostrando dados salvos</p>`;
+        }
+
         resultado.innerHTML = html;
 
     } catch (erro) {
-
         console.error(erro);
-
-        resultado.innerHTML = "<p class='mensagem'>Não foi possível conectar com o servidor.</p>";
-
+        resultado.innerHTML = "<p class='mensagem'>Não foi possível carregar os horários.</p>";
     }
 
 }
 
 
+// ============================================================
+// CALCULAR AGENDA
+// ============================================================
 
 async function calcularAgenda() {
 
@@ -159,11 +269,7 @@ async function calcularAgenda() {
         const resposta = await fetch("http://localhost:3000/api/agenda", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                modo: modo,
-                campus: campus,
-                horarioUsuario: horarioUsuario
-            })
+            body: JSON.stringify({ modo, campus, horarioUsuario })
         });
 
         const dados = await resposta.json();
@@ -196,51 +302,26 @@ async function calcularAgenda() {
                         <h3>Quero chegar às ${dados.horarioDesejado}</h3>
                     </div>
 
-
                     <div class="agenda-resultado-topo">
 
                         <div class="agenda-destaque">
-
                             <span class="agenda-destaque-tag">Pegue este ônibus</span>
-
-                            <div class="agenda-destaque-horario">
-                                ${dados.horarioOnibus}
-                            </div>
-
-                            <p class="agenda-destaque-desc">
-                                ${dados.linha} — Terminal Urbano
-                            </p>
-
+                            <div class="agenda-destaque-horario">${dados.horarioOnibus}</div>
+                            <p class="agenda-destaque-desc">${dados.linha} — Terminal Urbano</p>
                         </div>
 
-
                         <div class="agenda-destaque agenda-destaque-verde">
-
                             <span class="agenda-destaque-tag">Chegada estimada</span>
-
-                            <div class="agenda-destaque-horario">
-                                ${dados.chegadaMin} - ${dados.chegadaMax}
-                            </div>
-
-                            <p class="agenda-destaque-desc">
-                                Tempo de viagem: ${dados.tempoEstimado} min
-                            </p>
-
+                            <div class="agenda-destaque-horario">${dados.chegadaMin} - ${dados.chegadaMax}</div>
+                            <p class="agenda-destaque-desc">Tempo de viagem: ${dados.tempoEstimado} min</p>
                         </div>
 
                     </div>
 
-
                     <div class="agenda-status ${statusClasse}">
-
                         <span class="agenda-status-titulo">Margem até o horário desejado</span>
-
-                        <span class="agenda-status-valor">
-                            ${dados.margemSobra > 0 ? "+" : ""}${dados.margemSobra} minutos
-                        </span>
-
+                        <span class="agenda-status-valor">${dados.margemSobra > 0 ? "+" : ""}${dados.margemSobra} minutos</span>
                         <span class="agenda-status-desc">${statusTexto}</span>
-
                     </div>
 
                 </div>
@@ -258,53 +339,26 @@ async function calcularAgenda() {
                         <h3>Saio do IFSC às ${dados.horarioSaidaUsuario}</h3>
                     </div>
 
-
                     <div class="agenda-resultado-topo">
 
                         <div class="agenda-destaque">
-
                             <span class="agenda-destaque-tag">Ônibus passa no IFSC</span>
-
-                            <div class="agenda-destaque-horario">
-                                ${dados.horarioOnibus}
-                            </div>
-
-                            <p class="agenda-destaque-desc">
-                                ${dados.linha} — indo pro Terminal
-                            </p>
-
+                            <div class="agenda-destaque-horario">${dados.horarioOnibus}</div>
+                            <p class="agenda-destaque-desc">${dados.linha} — indo pro Terminal</p>
                         </div>
 
-
                         <div class="agenda-destaque agenda-destaque-verde">
-
                             <span class="agenda-destaque-tag">Chegada no Terminal</span>
-
-                            <div class="agenda-destaque-horario">
-                                ${dados.chegadaMin} - ${dados.chegadaMax}
-                            </div>
-
-                            <p class="agenda-destaque-desc">
-                                Tempo de viagem: ${dados.tempoEstimado} min
-                            </p>
-
+                            <div class="agenda-destaque-horario">${dados.chegadaMin} - ${dados.chegadaMax}</div>
+                            <p class="agenda-destaque-desc">Tempo de viagem: ${dados.tempoEstimado} min</p>
                         </div>
 
                     </div>
 
-
                     <div class="agenda-status ok">
-
                         <span class="agenda-status-titulo">Espera no ponto do IFSC</span>
-
-                        <span class="agenda-status-valor">
-                            ${dados.espera > 0 ? dados.espera + " minutos" : "Ônibus já está no ponto"}
-                        </span>
-
-                        <span class="agenda-status-desc">
-                            Inclui tempo médio de embarque dos estudantes no fim da aula
-                        </span>
-
+                        <span class="agenda-status-valor">${dados.espera > 0 ? dados.espera + " minutos" : "Ônibus já está no ponto"}</span>
+                        <span class="agenda-status-desc">Inclui tempo médio de embarque dos estudantes no fim da aula</span>
                     </div>
 
                 </div>
@@ -314,23 +368,21 @@ async function calcularAgenda() {
         }
 
     } catch (erro) {
-
         console.error(erro);
-
         resultado.innerHTML = "<p class='mensagem'>Não foi possível conectar com o servidor.</p>";
-
     }
 
 }
 
 
+// ============================================================
+// CALCULAR SALDO
+// ============================================================
 
 async function calcularSaldo() {
 
     const saldo = Number(document.getElementById("saldo").value);
-
     const valorPassagem = Number(document.getElementById("valorPassagem").value);
-
     const viagensPorDia = Number(document.getElementById("viagensPorDia").value);
 
     const resultado = document.getElementById("resultadoSaldo");
@@ -346,15 +398,164 @@ async function calcularSaldo() {
 
     resultado.innerHTML = "<p class='mensagem'>Calculando...</p>";
 
+    const viagensDisponiveisSemIntegracao = Math.floor(saldo / valorPassagem);
+    const diasSemIntegracao = Math.floor(viagensDisponiveisSemIntegracao / viagensPorDia);
+    const passagensCobradasPorDia = Math.ceil(viagensPorDia / 2);
+    const custoDiarioComIntegracao = passagensCobradasPorDia * valorPassagem;
+    const diasComIntegracao = Math.floor(saldo / custoDiarioComIntegracao);
+    const custoDiarioSemIntegracao = viagensPorDia * valorPassagem;
+    const economiaPorDia = custoDiarioSemIntegracao - custoDiarioComIntegracao;
+    const economiaTotal = economiaPorDia * diasComIntegracao;
+    const saldoRestante = saldo - (diasComIntegracao * custoDiarioComIntegracao);
+
+    resultado.innerHTML = `
+
+        <div class="calc-resultado">
+
+            <div class="calc-resultado-topo">
+
+                <div class="calc-destaque">
+                    <span class="calc-destaque-tag">Com integração</span>
+                    <div class="calc-destaque-valor">${diasComIntegracao} <span class="calc-destaque-unidade">dias</span></div>
+                    <p class="calc-destaque-desc">de transporte com o saldo atual</p>
+                </div>
+
+                <div class="calc-destaque calc-destaque-verde">
+                    <span class="calc-destaque-tag">Economia total</span>
+                    <div class="calc-destaque-valor"><span class="calc-moeda">R$</span> ${economiaTotal.toFixed(2)}</div>
+                    <p class="calc-destaque-desc">em relação a não usar integração</p>
+                </div>
+
+            </div>
+
+            <div class="calc-comparativo">
+
+                <div class="calc-coluna">
+                    <div class="calc-coluna-titulo">Sem integração</div>
+                    <div class="calc-linha"><span>Viagens possíveis</span><strong>${viagensDisponiveisSemIntegracao}</strong></div>
+                    <div class="calc-linha"><span>Dias de transporte</span><strong>${diasSemIntegracao}</strong></div>
+                </div>
+
+                <div class="calc-coluna">
+                    <div class="calc-coluna-titulo">Com integração (1h)</div>
+                    <div class="calc-linha"><span>Passagens por dia</span><strong>${passagensCobradasPorDia}</strong></div>
+                    <div class="calc-linha"><span>Custo diário</span><strong>R$ ${custoDiarioComIntegracao.toFixed(2)}</strong></div>
+                </div>
+
+            </div>
+
+            <div class="calc-rodape">
+                <div class="calc-linha"><span>Saldo restante</span><strong>R$ ${saldoRestante.toFixed(2)}</strong></div>
+                <div class="calc-linha"><span>Economia por dia</span><strong>R$ ${economiaPorDia.toFixed(2)}</strong></div>
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+// ============================================================
+// JUNÇÃO DE HORÁRIOS — TUDO AUTOMÁTICO
+// ============================================================
+
+let diaSelecionado = "segSex";
+let linhasDisponiveis = [];
+let juncaoJaCarregou = false;
+
+
+function selecionarDia(el) {
+
+    document.querySelectorAll(".juncao-dia").forEach(d => {
+        d.classList.remove("ativo");
+    });
+
+    el.classList.add("ativo");
+
+    diaSelecionado = el.getAttribute("data-dia");
+
+    juntarHorarios();
+
+}
+
+
+async function carregarLinhasJuncao() {
+
+    const container = document.getElementById("juncao-linhas");
+
     try {
 
-        const resposta = await fetch("http://localhost:3000/api/calcular-saldo", {
+        const resposta = await fetch("http://localhost:3000/api/lotacao/linhas");
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            container.innerHTML = "<p class='mensagem'>Erro ao carregar linhas.</p>";
+            return;
+        }
+
+        linhasDisponiveis = dados.linhas;
+
+        let html = "";
+
+        dados.linhas.forEach(linha => {
+
+            const badge = linha.passaIFSC ? '<span class="juncao-ifsc">IFSC</span>' : '';
+
+            html += `
+                <label class="juncao-linha">
+                    <input type="checkbox" value="${linha.id}" checked onchange="juntarHorarios()">
+                    <span class="juncao-linha-info">
+                        <strong>Linha ${linha.numero}</strong>
+                        <span>${linha.nome}</span>
+                    </span>
+                    ${badge}
+                </label>
+            `;
+
+        });
+
+        container.innerHTML = html;
+
+        juncaoJaCarregou = true;
+
+        juntarHorarios();
+
+    } catch (erro) {
+        console.error(erro);
+        container.innerHTML = "<p class='mensagem'>Não foi possível carregar as linhas.</p>";
+    }
+
+}
+
+
+async function juntarHorarios() {
+
+    const selecionadas = Array.from(
+        document.querySelectorAll("#juncao-linhas input[type=checkbox]:checked")
+    ).map(cb => cb.value);
+
+    const resultado = document.getElementById("juncao-resultado");
+
+    if (selecionadas.length === 0) {
+        resultado.innerHTML = "<p class='mensagem'>Nenhuma linha selecionada.</p>";
+        return;
+    }
+
+    if (juncaoJaCarregou) {
+        resultado.innerHTML = "<p class='mensagem'>Atualizando...</p>";
+    } else {
+        resultado.innerHTML = "<p class='mensagem'>Carregando horários...</p>";
+    }
+
+    try {
+
+        const resposta = await fetch("http://localhost:3000/api/lotacao/juntar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                saldo: saldo,
-                valorPassagem: valorPassagem,
-                viagensPorDia: viagensPorDia
+                linhasSelecionadas: selecionadas,
+                dia: diaSelecionado
             })
         });
 
@@ -365,123 +566,82 @@ async function calcularSaldo() {
             return;
         }
 
-        resultado.innerHTML = `
+        if (dados.total === 0) {
+            resultado.innerHTML = "<p class='mensagem'>Nenhum horário encontrado para esse dia.</p>";
+            return;
+        }
 
-            <div class="calc-resultado">
+        const buscaAtual = document.querySelector(".juncao-busca");
+        const textoBusca = buscaAtual ? buscaAtual.value : "";
 
-                <div class="calc-resultado-topo">
-
-                    <div class="calc-destaque">
-
-                        <span class="calc-destaque-tag">Com integração</span>
-
-                        <div class="calc-destaque-valor">
-
-                            ${dados.diasComIntegracao}
-
-                            <span class="calc-destaque-unidade">dias</span>
-
-                        </div>
-
-                        <p class="calc-destaque-desc">
-                            de transporte com o saldo atual
-                        </p>
-
-                    </div>
-
-
-                    <div class="calc-destaque calc-destaque-verde">
-
-                        <span class="calc-destaque-tag">Economia total</span>
-
-                        <div class="calc-destaque-valor">
-
-                            <span class="calc-moeda">R$</span> ${dados.economiaTotal.toFixed(2)}
-
-                        </div>
-
-                        <p class="calc-destaque-desc">
-                            em relação a não usar integração
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="calc-comparativo">
-
-                    <div class="calc-coluna">
-
-                        <div class="calc-coluna-titulo">Sem integração</div>
-
-                        <div class="calc-linha">
-                            <span>Viagens possíveis</span>
-                            <strong>${dados.viagensDisponiveisSemIntegracao}</strong>
-                        </div>
-
-                        <div class="calc-linha">
-                            <span>Dias de transporte</span>
-                            <strong>${dados.diasSemIntegracao}</strong>
-                        </div>
-
-                    </div>
-
-
-                    <div class="calc-coluna">
-
-                        <div class="calc-coluna-titulo">Com integração (1h)</div>
-
-                        <div class="calc-linha">
-                            <span>Passagens por dia</span>
-                            <strong>${dados.passagensCobradasPorDia}</strong>
-                        </div>
-
-                        <div class="calc-linha">
-                            <span>Custo diário</span>
-                            <strong>R$ ${dados.custoDiarioComIntegracao.toFixed(2)}</strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="calc-rodape">
-
-                    <div class="calc-linha">
-
-                        <span>Saldo restante</span>
-
-                        <strong>R$ ${dados.saldoRestante.toFixed(2)}</strong>
-
-                    </div>
-
-                    <div class="calc-linha">
-
-                        <span>Economia por dia</span>
-
-                        <strong>R$ ${dados.economiaPorDia.toFixed(2)}</strong>
-
-                    </div>
-
-                </div>
-
+        let html = `
+            <div class="juncao-header">
+                <span class="juncao-total">${dados.total} horários</span>
+                <input
+                    type="text"
+                    class="juncao-busca"
+                    placeholder="Buscar horário (ex: 14:)"
+                    value="${textoBusca}"
+                    oninput="filtrarJuncao(this.value)"
+                >
             </div>
-
+            <div class="juncao-grid" id="juncao-grid">
         `;
 
+        dados.horarios.forEach(h => {
+
+            const badge = h.passaIFSC ? '<span class="juncao-ifsc">IFSC</span>' : '';
+
+            html += `
+                <div class="juncao-item" data-horario="${h.horario}">
+                    <span class="juncao-horario">${h.horario}</span>
+                    <span class="juncao-linha-nome">${h.linha}</span>
+                    <span class="juncao-destino">${h.destino}</span>
+                    ${badge}
+                </div>
+            `;
+
+        });
+
+        html += "</div>";
+
+        resultado.innerHTML = html;
+
+        if (textoBusca) {
+            filtrarJuncao(textoBusca);
+        }
+
     } catch (erro) {
-
         console.error(erro);
-
-        resultado.innerHTML = "<p class='mensagem'>Não foi possível conectar com o servidor.</p>";
-
+        resultado.innerHTML = "<p class='mensagem'>Não foi possível juntar os horários.</p>";
     }
 
 }
 
 
+function filtrarJuncao(texto) {
+
+    const itens = document.querySelectorAll(".juncao-item");
+    const busca = texto.trim().toLowerCase();
+
+    itens.forEach(item => {
+
+        const horario = item.getAttribute("data-horario");
+
+        if (busca === "" || horario.includes(busca)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+
+    });
+
+}
+
+
+// ============================================================
+// CHAT COM IA
+// ============================================================
 
 function perguntaRapida(texto) {
     document.getElementById("perguntaIA").value = texto;
@@ -489,11 +649,9 @@ function perguntaRapida(texto) {
 }
 
 
-
 async function perguntarIA() {
 
     const input = document.getElementById("perguntaIA");
-
     const chat = document.getElementById("chat");
 
     const pergunta = input.value.trim();
@@ -503,15 +661,10 @@ async function perguntarIA() {
     chat.innerHTML += `
 
         <div class="msg-usuario">
-
             <div class="msg-bubble">
-
                 ${pergunta}
-
                 <span class="msg-hora">agora <span class="msg-check">✓✓</span></span>
-
             </div>
-
         </div>
 
     `;
@@ -523,19 +676,13 @@ async function perguntarIA() {
     chat.innerHTML += `
 
         <div class="msg-ia" id="${idDigitando}">
-
             <div class="msg-bubble">
-
                 <span class="typing">
-
                     <span></span>
                     <span></span>
                     <span></span>
-
                 </span>
-
             </div>
-
         </div>
 
     `;
@@ -547,7 +694,10 @@ async function perguntarIA() {
         const resposta = await fetch("http://localhost:3000/api/ia", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mensagem: pergunta })
+            body: JSON.stringify({
+                mensagem: pergunta,
+                usuarioId: "usuario-web"
+            })
         });
 
         const dados = await resposta.json();
@@ -559,37 +709,28 @@ async function perguntarIA() {
             chat.innerHTML += `
 
                 <div class="msg-ia">
-
                     <div class="msg-bubble">
-
                         Não foi possível gerar a resposta no momento.
-
                         <span class="msg-hora">agora</span>
-
                     </div>
-
                 </div>
 
             `;
 
             chat.scrollTop = chat.scrollHeight;
-
             return;
 
         }
 
+        const fonteTexto = dados.fonte === "local" ? "resposta local" : "resposta online";
+
         chat.innerHTML += `
 
             <div class="msg-ia">
-
                 <div class="msg-bubble">
-
                     ${dados.resposta.replace(/\n/g, "<br>")}
-
-                    <span class="msg-hora">agora</span>
-
+                    <span class="msg-hora">agora · ${fonteTexto}</span>
                 </div>
-
             </div>
 
         `;
@@ -605,15 +746,10 @@ async function perguntarIA() {
         chat.innerHTML += `
 
             <div class="msg-ia">
-
                 <div class="msg-bubble">
-
                     Não foi possível conectar com o servidor.
-
                     <span class="msg-hora">agora</span>
-
                 </div>
-
             </div>
 
         `;
@@ -621,3 +757,10 @@ async function perguntarIA() {
     }
 
 }
+
+
+// ============================================================
+// INICIALIZAÇÃO
+// ============================================================
+
+document.addEventListener("DOMContentLoaded", atualizarIndicador);
