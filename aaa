@@ -1,0 +1,20 @@
+ifsc-mobilidade/
+│
+├── backend/
+│   ├── server.js
+│   ├── routes/
+│   │   ├── horarios.js
+│   │   ├── pontos.js
+│   │   └── ia.js
+│   └── data/
+│       ├── horarios.json
+│       └── pontos.json
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── .gitignore
+├── package.json
+└── README.md
