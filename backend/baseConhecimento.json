@@ -1,0 +1,147 @@
+{
+    "versao": "1.0.0",
+    "ultimaAtualizacao": "2026-10-14",
+    "fonte": "Prefeitura de Chapecó + Auto Viação Chapecó",
+
+    "empresa": {
+        "nome": "Auto Viação Chapecó",
+        "endereco": "Rua Clevelândia, 75d - Terminal Urbano de Chapecó",
+        "horarioAtendimento": "Segunda a sexta, das 07:00 às 19:00",
+        "cidade": "Chapecó",
+        "estado": "SC"
+    },
+
+    "linhas": [
+        {
+            "id": "linha-08",
+            "numero": "08",
+            "nome": "Seminário",
+            "destino": "IFSC Seminário",
+            "origem": "Terminal Urbano",
+            "tempoMinimo": 15,
+            "tempoMaximo": 25,
+            "horarios": [
+                "05:35", "06:10", "06:35", "06:50", "07:10",
+                "07:30", "07:45", "08:05", "08:20", "09:00",
+                "09:40", "10:20", "11:00", "11:35", "11:45",
+                "12:10", "12:20", "12:40", "13:05", "13:15",
+                "13:30", "13:50", "14:20", "14:50", "15:30",
+                "16:00", "16:15", "16:30", "16:50", "17:15",
+                "17:20", "17:35", "17:45", "18:00", "18:10",
+                "18:25", "18:35", "18:45", "19:00", "19:30",
+                "20:00", "20:40", "21:15", "21:45", "21:55",
+                "22:10", "22:40", "23:00"
+            ]
+        },
+        {
+            "id": "linha-26",
+            "numero": "26",
+            "nome": "Progresso",
+            "destino": "IFSC Progresso",
+            "origem": "Terminal Urbano",
+            "tempoMinimo": 8,
+            "tempoMaximo": 15,
+            "horarios": [
+                "04:50", "05:30", "05:55", "06:20", "06:45",
+                "07:05", "07:20", "07:40", "08:00", "08:40",
+                "09:20", "10:00", "10:40", "11:20", "11:40",
+                "12:05", "12:35", "12:50", "13:20", "13:40",
+                "14:20", "15:00", "15:40", "16:20", "17:00",
+                "17:40", "18:05", "18:20", "18:50", "19:20",
+                "20:10", "20:50", "21:30", "22:00", "22:40",
+                "23:00", "23:40"
+            ]
+        }
+    ],
+
+    "tarifas": {
+        "estudante": 2.45,
+        "moeda": "BRL",
+        "descricao": "Valor da passagem para cartão estudante"
+    },
+
+    "integracao": {
+        "tipo": "tarifária temporal",
+        "duracaoMinutos": 60,
+        "regra": "1 integração a cada 2 passagens pagas",
+        "cartoesElegiveis": ["estudante", "passe urbano", "vale transporte"],
+        "restricoes": [
+            "Não vale em linhas sobrepostas",
+            "Não vale no retorno ao ponto de origem",
+            "Cartões gratuitos registram a passagem normalmente"
+        ]
+    },
+
+    "cartao": {
+        "documentosPrimeiroCartao": [
+            "RG e CPF",
+            "Comprovante de residência (nome do estudante ou dos pais)",
+            "Atestado de frequência carimbado e assinado"
+        ],
+        "documentosDesbloqueio": [
+            "RG e CPF",
+            "Cartão passe",
+            "Atestado de frequência carimbado e assinado"
+        ],
+        "instituicoesIntegradas": [
+            "UNOCHAPECÓ", "UNOESC", "SENAI", "UFFS", "IFSC", "UCEFF", "UDESC"
+        ],
+        "regraInstituicoesIntegradas": "Alunos das instituições integradas precisam apenas de RG e CPF para emissão, e RG + CPF + cartão para desbloqueio",
+        "recargaOnline": {
+            "disponivel": true,
+            "prazoCredito": "2 dias úteis",
+            "metodoPagamento": "Boleto bancário",
+            "requisito": "Cartão precisa estar desbloqueado presencialmente antes do primeiro acesso"
+        }
+    },
+
+    "aulas": {
+        "inicioTarde": "13:30",
+        "intervalo": "15:20",
+        "fimTarde": "17:00",
+        "fimTardeMaximo": "17:30"
+    },
+
+    "categorias": {
+        "saudacao": {
+            "resposta": "Olá! Sou o assistente do IFSC Mobilidade. Posso ajudar com horários, saldo, integração, cartão e muito mais. O que você precisa?",
+            "offline": true
+        },
+        "agradecimento": {
+            "resposta": "Por nada! Precisando de mais alguma coisa, é só chamar.",
+            "offline": true
+        },
+        "ajuda": {
+            "resposta": "Consigo responder sobre:\n• Próximo ônibus\n• Horários do dia\n• Tempo de viagem\n• Cálculo de saldo\n• Economia com integração\n• Integração tarifária\n• Documentos do cartão\n• Recarga on-line\n• Endereço de atendimento",
+            "offline": true
+        },
+        "integracao": {
+            "resposta": "A integração tarifária de Chapecó vale por até 1 hora entre viagens e permite 1 integração a cada 2 passagens pagas. Não vale em linhas sobrepostas nem no retorno ao ponto de origem. Cartões estudante, passe urbano e vale transporte têm esse direito.",
+            "offline": true
+        },
+        "atendimento": {
+            "resposta": "O atendimento presencial é na Auto Viação Chapecó, Rua Clevelândia, 75d, dentro do Terminal Urbano. Funciona de segunda a sexta, das 7h às 19h.",
+            "offline": true
+        },
+        "recarga": {
+            "resposta": "A recarga on-line está disponível para alunos das instituições integradas. Você cadastra login e senha no primeiro acesso, a recarga gera boleto bancário e o crédito entra em até 2 dias úteis. Antes do primeiro acesso, é preciso desbloquear o cartão no atendimento presencial.",
+            "offline": true
+        },
+        "tarifa": {
+            "resposta": "A tarifa do cartão estudante é R$ 2,45 por passagem. Com integração, você paga apenas 1 passagem a cada 2 viagens.",
+            "offline": true
+        },
+        "gratuidade": {
+            "resposta": "Cartões gratuitos registram a passagem normalmente, mas não têm direito à integração. A integração é exclusiva para cartão estudante, passe urbano e vale transporte.",
+            "offline": true
+        },
+        "cartao_documentos": {
+            "resposta": "Para tirar o cartão estudante você precisa de: RG e CPF, comprovante de residência e atestado de frequência carimbado. Alunos de instituições integradas (UNOCHAPECÓ, UNOESC, SENAI, UFFS, IFSC, UCEFF, UDESC) precisam apenas de RG e CPF. Local: Auto Viação Chapecó, Rua Clevelândia, 75d.",
+            "offline": true
+        },
+        "economia": {
+            "resposta": "Com integração, a cada 2 viagens você paga apenas 1 passagem de R$ 2,45. Se você faz ida e volta por dia, o custo diário cai de R$ 4,90 para R$ 2,45 — uma economia de 50%.",
+            "offline": true
+        }
+    }
+}
