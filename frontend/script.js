@@ -435,8 +435,10 @@ async function perguntarIA() {
     const pergunta = input.value.trim();
 
     if (!pergunta) return;
-    registrarEstatistica("pergunta");
+    
+    if (typeof registrarEstatistica === "function") registrarEstatistica("pergunta");
 
+    // Adiciona a bolha do usuário
     chat.innerHTML += `
         <div class="msg-usuario">
             <div class="msg-bubble">
@@ -447,6 +449,7 @@ async function perguntarIA() {
     `;
     input.value = "";
 
+    // Adiciona o "digitando..."
     const idDigitando = "digitando-" + Date.now();
     chat.innerHTML += `
         <div class="msg-ia" id="${idDigitando}">
@@ -457,43 +460,50 @@ async function perguntarIA() {
     `;
     chat.scrollTop = chat.scrollHeight;
 
-    try {
-        const resposta = await fetch("http://localhost:3000/api/ia", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ mensagem: pergunta, usuarioId: "usuario-web" })
-        });
+    let respostaFinal = "";
 
-        const dados = await resposta.json();
-        document.getElementById(idDigitando).remove();
+    // TENTA FALAR COM O SERVIDOR (SE ESTIVER LIGADO)
+    if (estaOnline()) {
+        try {
+            const resposta = await fetch("http://localhost:3000/api/ia", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mensagem: pergunta, usuarioId: "usuario-web" }),
+                // Se o servidor demorar mais de 2 segundos, cancela e usa a IA local
+                signal: AbortSignal.timeout(2000) 
+            });
 
-        if (!resposta.ok) {
-            chat.innerHTML += `<div class="msg-ia"><div class="msg-bubble">Não foi possível gerar a resposta no momento.<span class="msg-hora">agora</span></div></div>`;
-            chat.scrollTop = chat.scrollHeight;
-            return;
+            if (resposta.ok) {
+                const dados = await resposta.json();
+                respostaFinal = dados.resposta;
+            }
+        } catch (erro) {
+            console.log("Servidor offline ou lento. Usando IA local do navegador.");
         }
-
-        const fonteTexto = dados.fonte === "local" ? "resposta local" : "resposta online";
-        const idCopia = "texto-" + Date.now(); 
-        
-        chat.innerHTML += `
-            <div class="msg-ia">
-                <div class="msg-bubble">
-                    <div id="${idCopia}">${dados.resposta.replace(/\n/g, "<br>")}</div>
-                    <button class="btn-copiar" onclick="copiarResposta('${idCopia}', this)" title="Copiar resposta">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/></svg>
-                    </button>
-                    <span class="msg-hora">agora · ${fonteTexto}</span>
-                </div>
-            </div>
-        `;
-        chat.scrollTop = chat.scrollHeight;
-
-    } catch (erro) {
-        console.error(erro);
-        document.getElementById(idDigitando).remove();
-        chat.innerHTML += `<div class="msg-ia"><div class="msg-bubble">Não foi possível conectar com o servidor.<span class="msg-hora">agora</span></div></div>`;
     }
+
+    // SE O SERVIDOR NÃO RESPONDEU, USA A IA LOCAL DO NAVEGADOR
+    if (!respostaFinal) {
+        respostaFinal = responderIAOffline(pergunta);
+    }
+
+    // Remove o "digitando..." e mostra a resposta
+    document.getElementById(idDigitando).remove();
+
+    const idCopia = "texto-" + Date.now(); 
+    
+    chat.innerHTML += `
+        <div class="msg-ia">
+            <div class="msg-bubble">
+                <div id="${idCopia}">${respostaFinal.replace(/\n/g, "<br>")}</div>
+                <button class="btn-copiar" onclick="copiarResposta('${idCopia}', this)" title="Copiar resposta">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/></svg>
+                </button>
+                <span class="msg-hora">agora · resposta local</span>
+            </div>
+        </div>
+    `;
+    chat.scrollTop = chat.scrollHeight;
 }
 
 function copiarResposta(idElemento, botao) {
